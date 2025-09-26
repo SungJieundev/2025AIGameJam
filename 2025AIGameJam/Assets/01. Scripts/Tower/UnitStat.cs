@@ -7,7 +7,8 @@ public class UnitStat
 {
     public UnitSO unitSO;
     public int unitId;
-    public int unitHp;
+    public float unitMaxHp;
+    public float unitCurHp;
     public float unitBaseDamage;
     public float unitAddDamage;
     public float unitTotalDamage;
@@ -23,7 +24,8 @@ public class UnitStat
     public void UnitReset(UnitSO unitSO)
     {
         this.unitId = unitSO.unitId;
-        this.unitHp = unitSO.unitHp;
+        this.unitMaxHp = unitSO.unitHp;
+        this.unitCurHp = unitMaxHp;
         this.unitBaseDamage = unitSO.unitDamage;
         this.unitAddDamage = 0;
         this.unitTotalDamage = unitSO.unitDamage;

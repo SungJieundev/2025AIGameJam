@@ -8,6 +8,6 @@ public class Enums
     {
         MeleeSingle,
         MeleeAOE,
-        RangedSingle
+        RangeSingle
     }
 }
