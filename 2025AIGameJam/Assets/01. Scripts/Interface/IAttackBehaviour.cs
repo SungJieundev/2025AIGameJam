@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public interface IAttackBehaviour
@@ -8,4 +9,134 @@ public interface IAttackBehaviour
     void Begin(UnitBase u);      // 애니 트리거/사전 준비
     void OnHit(UnitBase u);      // 실제 피해/투사체/AOE
     void End(UnitBase u);
+}
+
+public static class AttackFactory
+{
+    public static IAttackBehaviour Create(UnitSO so) => so.attackKind switch
+    {
+        Enums.AttackKind.MeleeSingle => new MeleeSingleBehaviour(so),
+        Enums.AttackKind.RangeSingle => new RangedSingleBehaviour(so),
+        Enums.AttackKind.MeleeAOE => new MeleeAOEBehaviour(so),
+        _ => null
+    };
+}
+
+class MeleeSingleBehaviour : IAttackBehaviour
+{
+    readonly UnitSO so;
+    public MeleeSingleBehaviour(UnitSO so) { this.so = so; }
+
+    public bool CanExecute(UnitBase u)
+    {
+        u.ScanTarget();
+        bool inRange = u.target && u.InAttackRange(u.target, so.unitRange);
+        float cd = 1f / u.GetUnitStat().unitAttackSpeed;
+        bool cooldown = Time.time - u.lastAttackTime >= cd;
+        return inRange && cooldown;
+    }
+
+    public void Begin(UnitBase u)
+    {
+        Debug.Log("공격 실행");
+        u.isAttacking = true;
+        u.rb.velocity = Vector2.zero;
+        u.lastAttackTime = Time.time;
+        u.StartCoroutine(Hit(u));
+        // 공격 애니메이션 재생
+
+    }
+
+    IEnumerator Hit(UnitBase u)
+    {
+        yield return new WaitForSeconds(Mathf.Max(0f, so.meleeHitDelay));
+        OnHit(u);
+        End(u);
+    }
+
+    public void OnHit(UnitBase u)
+    {
+        if (u.target && u.InAttackRange(u.target, so.unitRange) &&
+            u.target.TryGetComponent<UnitBase>(out var d))
+            d.TakeDamage(u.GetUnitStat().unitTotalDamage);
+    }
+
+    public void End(UnitBase u) { u.isAttacking = false; }
+}
+
+class MeleeAOEBehaviour : IAttackBehaviour
+{
+    readonly UnitSO so;
+    static readonly Collider2D[] hits = new Collider2D[20];
+    public MeleeAOEBehaviour(UnitSO so) { this.so = so; }
+
+    public bool CanExecute(UnitBase u)
+    {
+        Vector2 center = (Vector2)u.transform.position + u.dir * (so.unitRange * 0.5f);
+        int count = Physics2D.OverlapCircleNonAlloc(center, so.unitRange, hits, u.enemyMask);
+        float cd = 1f / u.GetUnitStat().unitAttackSpeed;
+        return count > 0 && (Time.time - u.lastAttackTime >= cd);
+    }
+
+    public void Begin(UnitBase u)
+    {
+        Debug.Log("광역 공격 실행");
+        u.isAttacking = true;
+        u.rb.velocity = Vector2.zero;
+        u.lastAttackTime = Time.time;
+        u.StartCoroutine(Hit(u));
+        // 공격 애니메이션 재생
+    }
+
+    IEnumerator Hit(UnitBase u)
+    {
+        yield return new WaitForSeconds(Mathf.Max(0f, so.meleeHitDelay));
+        OnHit(u);
+        End(u);
+    }
+
+    public void OnHit(UnitBase u)
+    {
+        Vector2 center = (Vector2)u.transform.position + u.dir * (so.aoeRadius * 0.5f);
+        int count = Physics2D.OverlapCircleNonAlloc(center, so.aoeRadius, hits, u.enemyMask);
+        for (int i = 0; i < count; i++)
+            if (hits[i] && hits[i].TryGetComponent<UnitBase>(out var d))
+                d.TakeDamage(u.GetUnitStat().unitTotalDamage);
+    }
+
+    public void End(UnitBase u) { u.isAttacking = false; }
+}
+
+class RangedSingleBehaviour : IAttackBehaviour
+{
+    readonly UnitSO so;
+    public RangedSingleBehaviour(UnitSO so) { this.so = so; }
+
+    public bool CanExecute(UnitBase u)
+    {
+        u.ScanTarget();
+        bool inRange = u.target && u.InAttackRange(u.target, so.unitRange);
+        float cd = 1f / u.GetUnitStat().unitAttackSpeed;
+        bool cooldown = Time.time - u.lastAttackTime >= cd;
+        return inRange && cooldown;
+    }
+
+    public void Begin(UnitBase u)
+    {
+        Debug.Log("원거리 공격 실행");
+        u.isAttacking = true;
+        u.rb.velocity = Vector2.zero;
+        u.lastAttackTime = Time.time;
+        OnHit(u);
+        End(u);
+        // 공격 애니메이션 재생
+    }
+
+    public void OnHit(UnitBase u)
+    {
+        if (!u.target || !so.projectile) return;
+        Debug.Log("원거리 공격");
+    }
+
+    public void End(UnitBase u) { u.isAttacking = false; }
 }

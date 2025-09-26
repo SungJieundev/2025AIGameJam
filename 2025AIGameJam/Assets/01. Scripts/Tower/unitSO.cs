@@ -10,7 +10,7 @@ public class UnitSO : ScriptableObject
     public string   unitName;
     [TextArea]public string   unitDesc;
     public Sprite   unitRealImage;
-    public int      unitHp;
+    public float    unitHp;
     public float    unitDamage;
     public float    unitRange;
     public float    unitMoveSpeed;
