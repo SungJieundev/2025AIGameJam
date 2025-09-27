@@ -9,7 +9,8 @@ public class UnitBase : PoolableMono
     private UnitStat unitStat;
     public Transform firePoint;
 
-    public Rigidbody2D rb;
+    [HideInInspector] public Rigidbody2D rb;
+    public Animator anim;
 
     public Vector2 dir;
     public float lastAttackTime = -999f;
@@ -34,6 +35,7 @@ public class UnitBase : PoolableMono
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
 
         int enemyLayer = LayerMask.NameToLayer("Enemy");
         bool isEnemy = (enemyMask.value & (1 << enemyLayer)) != 0;
@@ -103,8 +105,11 @@ public class UnitBase : PoolableMono
 
     public void AttackEnterFromFSM()
     {
-        if (attack == null || !attack.CanExecute(this)) { GoMarch(); return; }
-        attack.Begin(this);
+        if(attack == null || !attack.CanExecute(this))
+        {
+            GoMarch();
+            return;
+        }
     }
 
     // 스캔 타이머 접근용

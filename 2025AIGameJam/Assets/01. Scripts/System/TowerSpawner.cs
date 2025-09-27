@@ -8,13 +8,17 @@ public class TowerSpawner : MonoBehaviour
     public List<GameObject> towerList;
     private Dictionary<int, float> lastSpawnTime = new Dictionary<int, float>();
     private int nowSpawnPoint;
+    private int nowSortingLayer = 6;
+
 
     public void SpawnTower(int index)
     {
         GameObject tower = PoolManager.Instance.Pop(towerList[index].name).gameObject;
         tower.transform.position = spawnPoint[nowSpawnPoint].transform.position;
         nowSpawnPoint += 1;
+        nowSortingLayer -= 1;
         if (nowSpawnPoint >= spawnPoint.Count) nowSpawnPoint = 0;
+        if (nowSortingLayer <= 1) nowSortingLayer = 6;
     }
 
     private void Update()
@@ -27,8 +31,6 @@ public class TowerSpawner : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F6)) BuyTower(5);
         if (Input.GetKeyDown(KeyCode.F7)) BuyTower(6);
         if (Input.GetKeyDown(KeyCode.F8)) BuyTower(7);
-
-
     }
 
     public void BuyTower(int index)

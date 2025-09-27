@@ -31,9 +31,13 @@ MonoBehaviour:
     Count: 5
   - Prefab: {fileID: 6497901799037546755, guid: 08be55221309eb943950262d58797cb9, type: 3}
     Count: 10
+  - Prefab: {fileID: 6497901799037546755, guid: dbf3abfd7a1587949ad213571b12a009, type: 3}
+    Count: 10
   - Prefab: {fileID: 6680050945652107122, guid: 6520224df7b392345b0fb7b289a047ee, type: 3}
-    Count: 10
+    Count: 5
   - Prefab: {fileID: 5924691919664796764, guid: ca6daa546d5a30a469ac849cea3a530f, type: 3}
-    Count: 10
+    Count: 5
   - Prefab: {fileID: 5238809849098912736, guid: d65bc976c29ef894e8cb8119c2a6ad04, type: 3}
-    Count: 10
+    Count: 5
+  - Prefab: {fileID: 5238809849098912736, guid: 40c6f9b7b4a782d458e3a34deba329e8, type: 3}
+    Count: 5

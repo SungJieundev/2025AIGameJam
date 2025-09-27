@@ -13,7 +13,7 @@ public class State_March : IState
         this.fsm = fsm;
     }
 
-    public void OnEnter() { Debug.Log("March"); }
+    public void OnEnter() { u.anim.SetTrigger("Move"); }
     public void Tick()
     {
         ref float scanTimer = ref u.ScanTimerRef();

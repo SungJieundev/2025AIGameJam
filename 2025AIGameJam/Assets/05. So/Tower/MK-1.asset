@@ -30,5 +30,5 @@ MonoBehaviour:
   projectile: {fileID: 7501395589532697553, guid: 08be55221309eb943950262d58797cb9, type: 3}
   aoeRange: 0
   aoeRadius: 0
-  rangeHitDelay: 0
+  rangeHitDelay: 0.2
   meleeHitDelay: 0

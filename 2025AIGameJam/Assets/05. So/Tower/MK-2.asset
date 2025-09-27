@@ -22,12 +22,12 @@ MonoBehaviour:
   unitRealImage: {fileID: 0}
   unitHp: 70
   unitDamage: 30
-  unitRange: 3
+  unitRange: 4
   unitMoveSpeed: 1
   unitAttackSpeed: 1
   attackKind: 2
-  projectile: {fileID: 7501395589532697553, guid: 08be55221309eb943950262d58797cb9, type: 3}
+  projectile: {fileID: 7501395589532697553, guid: dbf3abfd7a1587949ad213571b12a009, type: 3}
   aoeRange: 0
   aoeRadius: 0
-  rangeHitDelay: 0
+  rangeHitDelay: 0.3
   meleeHitDelay: 0

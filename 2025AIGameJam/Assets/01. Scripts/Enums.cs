@@ -9,6 +9,7 @@ public class Enums
         MeleeSingle,
         MeleeAOE,
         RangeSingle,
-        RangeAOE
+        RangeAOE,
+        Protocol
     }
 }

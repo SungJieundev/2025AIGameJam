@@ -15,15 +15,17 @@ MonoBehaviour:
   unitId: 11
   unitName: "\uC0B5"
   unitDesc: "\uCE61 \uC544\uB2C8\uACE0 "
+  unitPrice: 0
+  cooldown: 0
   unitRealImage: {fileID: 0}
   unitHp: 100
   unitDamage: 30
   unitRange: 2
-  unitMoveSpeed: 3
+  unitMoveSpeed: 1
   unitAttackSpeed: 1
   attackKind: 0
   projectile: {fileID: 0}
   aoeRange: 0
   aoeRadius: 0
   rangeHitDelay: 0
-  meleeHitDelay: 0.5
+  meleeHitDelay: 0.1

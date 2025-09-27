@@ -16,15 +16,16 @@ MonoBehaviour:
   unitName: "\uC624\uC218\uB2EC"
   unitDesc: "\uC624\uC218\uB2EC"
   unitPrice: 0
+  cooldown: 0
   unitRealImage: {fileID: 0}
   unitHp: 150
   unitDamage: 40
   unitRange: 2
-  unitMoveSpeed: 4
+  unitMoveSpeed: 2
   unitAttackSpeed: 1
   attackKind: 0
   projectile: {fileID: 0}
   aoeRange: 0
   aoeRadius: 0
   rangeHitDelay: 0
-  meleeHitDelay: 0.5
+  meleeHitDelay: 0.2

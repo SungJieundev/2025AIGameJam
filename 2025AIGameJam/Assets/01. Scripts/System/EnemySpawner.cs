@@ -19,6 +19,7 @@ public class EnemySpawner : MonoBehaviour
     public List<EnemyWave> waves;
     public float waveTimers;
     private int nowSpawnPoint;
+    private int nowSortingLayer = 6;
 
 
     private void Update()
@@ -43,9 +44,12 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < wave.count; i++ )
         {
             GameObject enemy = PoolManager.Instance.Pop(wave.enemy.name).gameObject;
+            enemy.GetComponent<SpriteRenderer>().sortingOrder = nowSortingLayer;
             enemy.transform.position = spawnPoint[nowSpawnPoint].transform.position;
             nowSpawnPoint += 1;
+            nowSortingLayer -= 1;
             if (nowSpawnPoint >= spawnPoint.Count) nowSpawnPoint = 0;
+            if (nowSortingLayer <= 1) nowSortingLayer = 6;
             yield return new WaitForSeconds(wave.interval);
         }
     }    

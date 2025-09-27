@@ -15,7 +15,7 @@ public class State_Attack : IState
 
     public void OnEnter()
     {
-        Debug.Log("Attack");
+        
         u.rb.velocity = Vector2.zero;
         u.AttackEnterFromFSM();
     }
@@ -28,9 +28,18 @@ public class State_Attack : IState
             return;
         }
 
-        if (!u.isAttacking && u.attack != null && u.attack.CanExecute(u))
+        if (!u.isAttacking && u.attack != null)
         {
-            u.attack.Begin(u);
+            if (u.attack.CanExecute(u))
+            {
+                // 공격 가능 → 공격 실행
+                u.attack.Begin(u);
+            }
+            else
+            {
+                // 사거리 안인데 쿨타임 중 → Idle 애니 출력
+                u.anim.SetTrigger("Idle");
+            }
         }
     }
 
