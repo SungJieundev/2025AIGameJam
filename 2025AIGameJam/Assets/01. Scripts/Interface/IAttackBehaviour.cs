@@ -267,10 +267,12 @@ class ProtocolBehaviour : IAttackBehaviour
     {
         Vector2 center = (Vector2)u.transform.position + u.dir * so.aoeRange;
         int count = Physics2D.OverlapCircleNonAlloc(center, so.aoeRadius, hits, u.enemyMask);
+        // 프로토콜 마지막 공격 소리
         for (int i = 0; i < count; i++)
         {
             if (hits[i] && hits[i].TryGetComponent<UnitBase>(out var d))
                 d.TakeDamage(u.GetUnitStat().unitTotalDamage);
+
             if (hits[i] && hits[i].TryGetComponent<GameTarget>(out var t))
                 t.TakeDamage(u.GetUnitStat().unitTotalDamage);
         }
