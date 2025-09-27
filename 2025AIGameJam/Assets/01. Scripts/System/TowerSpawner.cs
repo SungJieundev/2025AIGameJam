@@ -14,6 +14,7 @@ public class TowerSpawner : MonoBehaviour
     public void SpawnTower(int index)
     {
         GameObject tower = PoolManager.Instance.Pop(towerList[index].name).gameObject;
+        tower.GetComponent<SpriteRenderer>().sortingOrder = nowSortingLayer;
         tower.transform.position = spawnPoint[nowSpawnPoint].transform.position;
         nowSpawnPoint += 1;
         nowSortingLayer -= 1;

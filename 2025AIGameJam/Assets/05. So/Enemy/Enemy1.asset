@@ -18,11 +18,11 @@ MonoBehaviour:
   unitPrice: 0
   cooldown: 0
   unitRealImage: {fileID: 0}
-  unitHp: 10000
+  unitHp: 100
   unitDamage: 30
   unitRange: 2
   unitMoveSpeed: 1
-  unitAttackSpeed: 1
+  unitAttackSpeed: 0.5
   attackKind: 0
   projectile: {fileID: 0}
   aoeRange: 0

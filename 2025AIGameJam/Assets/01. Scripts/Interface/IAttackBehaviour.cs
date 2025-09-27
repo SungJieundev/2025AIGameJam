@@ -68,7 +68,7 @@ class MeleeSingleBehaviour : IAttackBehaviour
             t.TakeDamage(u.GetUnitStat().unitTotalDamage);
     }
 
-    public void End(UnitBase u) { u.isAttacking = false; u.ScanTarget(); }
+    public void End(UnitBase u) { u.isAttacking = false;}
 }
 
 class MeleeAOEBehaviour : IAttackBehaviour
@@ -117,7 +117,7 @@ class MeleeAOEBehaviour : IAttackBehaviour
         }
     }
 
-    public void End(UnitBase u) { u.isAttacking = false; u.ScanTarget(); }
+    public void End(UnitBase u) { u.isAttacking = false;}
 }
 
 class RangedSingleBehaviour : IAttackBehaviour
@@ -160,7 +160,7 @@ class RangedSingleBehaviour : IAttackBehaviour
         Debug.Log("원거리 공격");
     }
 
-    public void End(UnitBase u) { u.isAttacking = false; u.ScanTarget(); }
+    public void End(UnitBase u) { u.isAttacking = false; }
 }
 
 class RangedAOEBehaviour : IAttackBehaviour
@@ -209,7 +209,7 @@ class RangedAOEBehaviour : IAttackBehaviour
             
         
     }
-    public void End(UnitBase u) { u.isAttacking = false; u.ScanTarget(); }
+    public void End(UnitBase u) { u.isAttacking = false; }
 }
 
 class ProtocolBehaviour : IAttackBehaviour
@@ -278,5 +278,5 @@ class ProtocolBehaviour : IAttackBehaviour
 
     }
 
-    public void End(UnitBase u) { u.isAttacking = false; u.ScanTarget(); }
+    public void End(UnitBase u) { u.isAttacking = false;}
 }
