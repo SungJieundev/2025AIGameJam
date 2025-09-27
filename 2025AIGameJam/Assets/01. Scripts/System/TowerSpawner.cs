@@ -31,6 +31,7 @@ public class TowerSpawner : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F6)) BuyTower(5);
         if (Input.GetKeyDown(KeyCode.F7)) BuyTower(6);
         if (Input.GetKeyDown(KeyCode.F8)) BuyTower(7);
+        if (Input.GetKeyDown(KeyCode.F9)) SpawnTower(8);
     }
 
     public void BuyTower(int index)

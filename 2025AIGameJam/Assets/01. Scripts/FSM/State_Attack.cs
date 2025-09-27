@@ -22,6 +22,8 @@ public class State_Attack : IState
 
     public void Tick()
     {
+        if (u.isAttacking) return;
+
         if (!u.target || !u.InAttackRange(u.target))
         {
             u.GoMarch();

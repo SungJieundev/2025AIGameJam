@@ -12,21 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdcb5f60e0be6d94bbcdb4af20924a8c, type: 3}
   m_Name: MK-9
   m_EditorClassIdentifier: 
-  unitId: 0
-  unitName: 
+  unitId: 9
+  unitName: "\uD504\uB85C\uD1A0\uCF5C \uBA54\uCE74"
   unitDesc: 
   unitPrice: 0
-  cooldown: 0
+  cooldown: 60
   unitRealImage: {fileID: 0}
-  unitHp: 0
-  unitDamage: 0
-  unitRange: 0
-  unitMoveSpeed: 0
-  unitAttackSpeed: 0
-  attackKind: 0
+  unitHp: 3000
+  unitDamage: 400
+  unitRange: 3
+  unitMoveSpeed: 2
+  unitAttackSpeed: 0.2
+  attackKind: 4
   projectile: {fileID: 0}
-  aoeRange: 0
-  aoeRadius: 0
+  aoeRange: 3
+  aoeRadius: 3
   rangeHitDelay: 0
   meleeHitDelay: 0
-  rangeToMelee: 0
+  Hit1Deley: 1.2
+  Hit2Deley: 0.4
+  Hit3Deley: 2
+  Hit4Deley: 1

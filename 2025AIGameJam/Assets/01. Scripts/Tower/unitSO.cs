@@ -38,5 +38,7 @@ public class UnitSO : ScriptableObject
     public float Hit2Deley;
     [Tooltip("세번째 공격 딜레이")]
     public float Hit3Deley;
+    [Tooltip("네번째 공격 딜레이")]
+    public float Hit4Deley;
 
 }

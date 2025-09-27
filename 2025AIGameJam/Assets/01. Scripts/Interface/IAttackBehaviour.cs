@@ -243,7 +243,8 @@ class ProtocolBehaviour : IAttackBehaviour
         yield return new WaitForSeconds(Mathf.Max(0f, so.Hit2Deley));
         OnHit(u);
         yield return new WaitForSeconds(Mathf.Max(0f, so.Hit3Deley));
-
+        OnHit2(u);
+        yield return new WaitForSeconds(Mathf.Max(0f, so.Hit4Deley));
         End(u);
     }
 
@@ -259,6 +260,7 @@ class ProtocolBehaviour : IAttackBehaviour
             if (hits[i] && hits[i].TryGetComponent<GameTarget>(out var t))
                 t.TakeDamage(u.GetUnitStat().unitTotalDamage);
         }
+        Debug.Log("Protocol Attack");
     }
 
     public void OnHit2(UnitBase u)
@@ -272,6 +274,8 @@ class ProtocolBehaviour : IAttackBehaviour
             if (hits[i] && hits[i].TryGetComponent<GameTarget>(out var t))
                 t.TakeDamage(u.GetUnitStat().unitTotalDamage);
         }
+        Debug.Log("Protocol Attack");
+
     }
 
     public void End(UnitBase u) { u.isAttacking = false; u.ScanTarget(); }
