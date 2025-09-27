@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class UnitBase : MonoBehaviour
+public class UnitBase : PoolableMono
 {
     public UnitSO unitSO;
     private UnitStat unitStat;
@@ -140,6 +140,10 @@ public class UnitBase : MonoBehaviour
     }
     #endregion
 
+    public override void Reset()
+    {
+        
+    }
     void OnDrawGizmosSelected()
     {
         if (!Application.isPlaying)

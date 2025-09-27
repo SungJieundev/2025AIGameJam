@@ -20,8 +20,12 @@ public class UnitSO : ScriptableObject
     public Enums.AttackKind attackKind;
     [Tooltip("원거리일 때 투사체 프리팹(선택)")]
     public GameObject projectile;
+    [Tooltip("원거리 범위공격일 때 공격 거리(선택)")]
+    public float aoeRange;
     [Tooltip("범위공격일 때 반경(선택)")]
     public float aoeRadius;
+    [Tooltip("원거리 범위공격 타이밍 지연(선택)")]
+    public float rangeHitDelay;
     [Tooltip("근접 히트 타이밍 지연(선택)")]
     public float meleeHitDelay;
 

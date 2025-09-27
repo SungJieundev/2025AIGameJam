@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1b4d7c2f9fe3ad4fbd706b5629be0b2, type: 3}
+  m_Name: ObjectPool
+  m_EditorClassIdentifier: 
+  PoolList:
+  - Prefab: {fileID: 6727010353918555492, guid: 7b896ed9eb8234f49b916e1b18316304, type: 3}
+    Count: 5
+  - Prefab: {fileID: 6497901799037546755, guid: 08be55221309eb943950262d58797cb9, type: 3}
+    Count: 10
+  - Prefab: {fileID: 6680050945652107122, guid: 6520224df7b392345b0fb7b289a047ee, type: 3}
+    Count: 10
+  - Prefab: {fileID: 5924691919664796764, guid: ca6daa546d5a30a469ac849cea3a530f, type: 3}
+    Count: 10
+  - Prefab: {fileID: 5238809849098912736, guid: d65bc976c29ef894e8cb8119c2a6ad04, type: 3}
+    Count: 10

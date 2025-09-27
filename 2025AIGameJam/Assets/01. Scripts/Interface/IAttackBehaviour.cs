@@ -18,6 +18,7 @@ public static class AttackFactory
         Enums.AttackKind.MeleeSingle => new MeleeSingleBehaviour(so),
         Enums.AttackKind.RangeSingle => new RangedSingleBehaviour(so),
         Enums.AttackKind.MeleeAOE => new MeleeAOEBehaviour(so),
+        Enums.AttackKind.RangeAOE => new RangedAOEBehaviour(so),
         _ => null
     };
 }
@@ -135,8 +136,53 @@ class RangedSingleBehaviour : IAttackBehaviour
     public void OnHit(UnitBase u)
     {
         if (!u.target || !so.projectile) return;
+        var proj = PoolManager.Instance.Pop(so.projectile.name);
+        proj.gameObject.GetComponent<Projectile>().Init(u);
+        proj.transform.position = u.firePoint.position;
         Debug.Log("원거리 공격");
     }
 
+    public void End(UnitBase u) { u.isAttacking = false; }
+}
+
+class RangedAOEBehaviour : IAttackBehaviour
+{
+    readonly UnitSO so;
+    static readonly Collider2D[] hits = new Collider2D[20];
+    public RangedAOEBehaviour(UnitSO so) { this.so = so; }
+    public bool CanExecute(UnitBase u)
+    {
+        u.ScanTarget();
+        bool inRange = u.target && u.InAttackRange(u.target, so.unitRange);
+        float cd = 1f / u.GetUnitStat().unitAttackSpeed;
+        bool cooldown = Time.time - u.lastAttackTime >= cd;
+        return inRange && cooldown;
+    }
+    public void Begin(UnitBase u)
+    {
+        Debug.Log("광역 원거리 공격 실행");
+        u.isAttacking = true;
+        u.rb.velocity = Vector2.zero;
+        u.lastAttackTime = Time.time;
+        u.StartCoroutine(Hit(u));
+        // 공격 애니메이션 재생
+    }
+
+    IEnumerator Hit(UnitBase u)
+    {
+        yield return new WaitForSeconds(Mathf.Max(0f, so.rangeHitDelay));
+        OnHit(u);
+        End(u);
+    }
+    public void OnHit(UnitBase u)
+    {
+        Vector2 center = (Vector2)u.transform.position + u.dir * so.aoeRange;
+        Debug.DrawLine(u.transform.position, center, Color.red, 0.5f);
+        int count = Physics2D.OverlapCircleNonAlloc(center, so.aoeRadius, hits, u.enemyMask);
+        for (int i = 0; i < count; i++)
+            if (hits[i] && hits[i].TryGetComponent<UnitBase>(out var d))
+                d.TakeDamage(u.GetUnitStat().unitTotalDamage);
+        
+    }
     public void End(UnitBase u) { u.isAttacking = false; }
 }

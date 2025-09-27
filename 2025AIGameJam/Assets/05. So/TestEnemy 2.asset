@@ -10,20 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bdcb5f60e0be6d94bbcdb4af20924a8c, type: 3}
-  m_Name: New TowerSO
+  m_Name: TestEnemy 2
   m_EditorClassIdentifier: 
-  unitId: 1
-  unitName: "\uD14C\uC2A4\uD2B8\uC6A9 \uD0C0\uC6CC"
-  unitDesc: "\uD14C\uC2A4\uD2B8\uC6A9 \uD0C0\uC6CC"
+  unitId: 11
+  unitName: "\uD14C\uC2A4\uD2B8\uC6A9 \uC801"
+  unitDesc: "\uD14C\uC2A4\uD2B8\uC6A9 \uC801"
   unitRealImage: {fileID: 0}
-  unitHp: 100
+  unitHp: 10
   unitDamage: 1
-  unitRange: 7
-  unitMoveSpeed: 3
+  unitRange: 2
+  unitMoveSpeed: 1
   unitAttackSpeed: 1
-  attackKind: 3
-  projectile: {fileID: 7501395589532697553, guid: 08be55221309eb943950262d58797cb9, type: 3}
-  aoeRange: 5
-  aoeRadius: 1
-  rangeHitDelay: 2
+  attackKind: 0
+  projectile: {fileID: 0}
+  aoeRadius: 0
   meleeHitDelay: 0.1
