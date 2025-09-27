@@ -46,7 +46,7 @@ public class CollectionPanelMove : MonoBehaviour
 
     private void MoveNextPanel()
     {
-        _panelParent.DOAnchorPosX(_panelParent.anchoredPosition.x - _panelMoveDistance, 0.5f);
+        _panelParent.DOAnchorPosX(_panelParent.anchoredPosition.x - _panelMoveDistance, 0.5f).SetEase(Ease.OutExpo);
         
         currentMoveIndex++;
         if (currentMoveIndex > 0) previousButton.SetActive(true);
@@ -58,7 +58,7 @@ public class CollectionPanelMove : MonoBehaviour
 
     private void MovePreviousPanel()
     {
-        _panelParent.DOAnchorPosX(_panelParent.anchoredPosition.x + _panelMoveDistance, 0.5f);
+        _panelParent.DOAnchorPosX(_panelParent.anchoredPosition.x + _panelMoveDistance, 0.5f).SetEase(Ease.OutExpo);
         
         currentMoveIndex--;
         if (currentMoveIndex == 0) previousButton.SetActive(false);
