@@ -18,6 +18,7 @@ MonoBehaviour:
     \uBA54\uCE74.\r\n\uBC29\uD328\uB85C \uB9C9\uC9C0\uB294 \uC54A\uACE0 \uACF5\uACA9\uD560\uB54C\uC5D0\uB9CC
     \uC4F4\uB2E4.(\uB2E8\uC77C \uACF5\uACA9)"
   unitPrice: 350
+  cooldown: 15
   unitRealImage: {fileID: 0}
   unitHp: 600
   unitDamage: 50
