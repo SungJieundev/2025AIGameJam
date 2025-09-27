@@ -7,14 +7,18 @@ using UnityEngine.EventSystems;
 
 public class UIManager : MonoBehaviour
 {
+    
+    /// <summary>
+    /// ✅ 버튼 OnClick에 등록해서 쓰는 버전 (기존)
+    /// 클릭한 버튼이 속한 캔버스를 비활성화하고, targetCanvas를 활성화합니다.
+    /// </summary>
     public void LoadCanvas(Canvas targetCanvas)
     {
-        // 1. 새로 띄울 캔버스 활성화
+        // 1) 새 캔버스 활성화
         targetCanvas.gameObject.SetActive(true);
 
-        // 2. 현재 클릭된 버튼이 속한 캔버스를 비활성화
-        GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
-
+        // 2) 클릭된 버튼이 속한 캔버스 비활성화
+        GameObject clickedButton = EventSystem.current?.currentSelectedGameObject;
         if (clickedButton != null)
         {
             Canvas parentCanvas = clickedButton.GetComponentInParent<Canvas>();
@@ -23,6 +27,19 @@ public class UIManager : MonoBehaviour
                 parentCanvas.gameObject.SetActive(false);
             }
         }
+    }
+
+    /// <summary>
+    /// ✅ 코드에서 호출하는 버전 (인트로 끝나고 넘어갈 때)
+    /// currentCanvasToDisable를 명시적으로 꺼주고, targetCanvas를 활성화합니다.
+    /// </summary>
+    public void LoadCanvas(Canvas targetCanvas, Canvas currentCanvasToDisable)
+    {
+        if (targetCanvas != null)
+            targetCanvas.gameObject.SetActive(true);
+
+        if (currentCanvasToDisable != null && currentCanvasToDisable != targetCanvas)
+            currentCanvasToDisable.gameObject.SetActive(false);
     }
 
     public void PopupPanel(GameObject targetPanel)
@@ -91,6 +108,8 @@ public class UIManager : MonoBehaviour
 
         currentTween = seq;
     }
+    
+    
     
 }
     
