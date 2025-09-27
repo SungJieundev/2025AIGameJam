@@ -22,7 +22,7 @@ MonoBehaviour:
   unitDamage: 400
   unitRange: 3
   unitMoveSpeed: 2
-  unitAttackSpeed: 0.2
+  unitAttackSpeed: 0.1
   attackKind: 4
   projectile: {fileID: 0}
   aoeRange: 3
@@ -31,5 +31,5 @@ MonoBehaviour:
   meleeHitDelay: 0
   Hit1Deley: 1.2
   Hit2Deley: 0.4
-  Hit3Deley: 2
-  Hit4Deley: 1
+  Hit3Deley: 2.5
+  Hit4Deley: 1.5

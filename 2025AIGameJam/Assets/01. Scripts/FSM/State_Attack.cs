@@ -22,27 +22,17 @@ public class State_Attack : IState
 
     public void Tick()
     {
-        if (u.isAttacking) return;
+        if (u.isAttacking) return; // 공격 중이면 타겟 유무와 상관없이 끝날 때까지 대기
 
         if (!u.target || !u.InAttackRange(u.target))
         {
             u.GoMarch();
             return;
         }
-
-        if (!u.isAttacking && u.attack != null)
-        {
-            if (u.attack.CanExecute(u))
-            {
-                // 공격 가능 → 공격 실행
-                u.attack.Begin(u);
-            }
-            else
-            {
-                // 사거리 안인데 쿨타임 중 → Idle 애니 출력
-                u.anim.SetTrigger("Idle");
-            }
-        }
+        else if (u.attack != null && u.attack.CanExecute(u))
+            u.attack.Begin(u);
+        else
+            u.anim.SetTrigger("Idle");
     }
 
     public void FixedTick() { u.rb.velocity = Vector2.zero; }

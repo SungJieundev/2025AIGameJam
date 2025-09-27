@@ -27,8 +27,12 @@ MonoBehaviour:
   unitMoveSpeed: 1.5
   unitAttackSpeed: 0.5
   attackKind: 2
-  projectile: {fileID: 7501395589532697553, guid: 08be55221309eb943950262d58797cb9, type: 3}
+  projectile: {fileID: 7501395589532697553, guid: 9c5a51b6376751a4291b09e7bfbb5d55, type: 3}
   aoeRange: 0
   aoeRadius: 0
-  rangeHitDelay: 0
+  rangeHitDelay: 0.5
   meleeHitDelay: 0
+  Hit1Deley: 0
+  Hit2Deley: 0
+  Hit3Deley: 0
+  Hit4Deley: 0
