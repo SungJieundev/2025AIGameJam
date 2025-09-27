@@ -7,79 +7,64 @@ using DG.Tweening;
 public class IntroCutSceneManagement : MonoBehaviour
 {
     [Header("Canvas Refs")]
-    public UIManager uiManager;      // UIManager 참조
-    public Canvas introCanvas;       // 현재 인트로 캔버스
-    public Canvas mainHomeCanvas;    // 메인 홈 캔버스
+    public UIManager uiManager;
+    public Canvas introCanvas;       // 이 스크립트가 붙은 인트로 캔버스
+    public Canvas mainHomeCanvas;    // 전환 대상 메인 홈 캔버스
 
     [Header("Skip Button")]
-    public Button skipButton;        // 인스펙터에서 OnClick에 UIManager.LoadCanvas(mainHomeCanvas) 등록
+    // OnClick에 1) UIManager.LoadCanvas(mainHomeCanvas)
+    //          2) (선택) IntroCutSceneManagement.OnSkipFinalize() 를 같이 등록하면 더 안전
+    public Button skipButton;
 
     [Header("Intro Objects")]
     public GameObject scene1Background;
+
+    // TMP는 각 TextBackground(Panel)의 "자식"
     public TextMeshProUGUI scene1Text;
     public TextMeshProUGUI scene2Text;
 
-    public GameObject flashPanel;            // 깜빡임용 (CanvasGroup 필요)
+    public GameObject flashPanel;             // 흰색 Image + CanvasGroup
     public GameObject sceneAttackBackground;
     public GameObject waitPanel;
 
-    public GameObject chunsun_1;
-    public GameObject chunsun_2;
+    public GameObject chunsoon_1;
+    public GameObject chunsoon_2;
 
     public GameObject player_1;
     public GameObject player_2;
     public TextMeshProUGUI playerText;
 
     [Header("Black Fade Panel")]
-    public GameObject fadePanel;             // 전체 화면 검정 패널 (CanvasGroup 필요)
+    public GameObject fadePanel;              // 검정 Image + CanvasGroup
 
-    private int currentStep = 0;
+    [Header("Timings")]
+    // 섬광탄 느낌(짧게 확 밝고 빠르게 사라짐)
+    public float flashIn   = 0.06f;
+    public float flashHold = 0.04f;
+    public float flashOut  = 0.20f;
+    // 마지막 전환용 검정 페이드 아웃(페이드 인 없음)
+    public float finalFadeOut = 0.5f;
+
+    private int  currentStep = 0;
     private bool isAnimating = false;
-    private const int MaxStep = 8;           // 마지막 단계 번호
-    
-    // 인트로 캔버스 켜기
-    // 인트로 씬 1번의 배경 켜기
-    // 인트로 씬 1번 텍스트 페이드 
-    // 2번 텍스트 페이드
-    // 섬광 연출
-    // 공격당하는 씬 Background 활성화
-    // 잠깐! 띄우기
-    // 섬광 연출 
-    // 천순이 등장 이미지 
-    // 천순이 확대 이미지 (설명할 시간 없어 어서타)
-    // 아 너무 멋지다 이미지
-    // 주인공 클로즈업 이미지 
-    // 텍스트 페이드 까짓거 한번 해보죠.
+    private bool shutDown    = false;
+    private const int MaxStep = 8;
 
-    void Start()
+    // ✅ IntroCanvas가 LoadCanvas로 "켜질 때"마다 초기화
+    void OnEnable()
     {
-        // 초기 상태 세팅
-        introCanvas.gameObject.SetActive(true);
-        if (mainHomeCanvas != null) mainHomeCanvas.gameObject.SetActive(false);
+        ResetIntroState();
+    }
 
-        SafeSetActive(scene1Background, false);
-        SafeSetAlpha(scene1Text, 0f);
-        SafeSetAlpha(scene2Text, 0f);
-
-        SafeSetActive(flashPanel, false);
-        SafeSetActive(sceneAttackBackground, false);
-        SafeSetActive(waitPanel, false);
-
-        SafeSetActive(chunsun_1, false);
-        SafeSetActive(chunsun_2, false);
-        SafeSetActive(player_1, false);
-        SafeSetActive(player_2, false);
-        SafeSetAlpha(playerText, 0f);
-
-        // 패널 CanvasGroup 확보
-        EnsureCanvasGroup(flashPanel);
-        EnsureCanvasGroup(fadePanel);
-        if (fadePanel != null) fadePanel.SetActive(false);
+    // ✅ IntroCanvas가 "꺼질 때" 자동 정리 (메인 홈/타이틀로 전환 시)
+    void OnDisable()
+    {
+        ShutdownIntro();
     }
 
     void Update()
     {
-        if (isAnimating) return;
+        if (shutDown || isAnimating) return;
 
         // 스킵 버튼을 클릭한 프레임은 인트로 진행 입력 무시 (스킵은 OnClick에서 처리)
         if (EventSystem.current != null && skipButton != null)
@@ -98,8 +83,30 @@ public class IntroCutSceneManagement : MonoBehaviour
             }
             else
             {
-                // 마지막 이후 입력 → 페이드 아웃 후 메인 홈 전환(페이드 인 없음, 바로 패널 끔)
-                StartCoroutine(FadeToMainHome());
+                // 마지막 이후 입력 → 검정 페이드 아웃 → 메인 홈 전환 → 즉시 검정 패널 끔
+                if (fadePanel != null)
+                {
+                    StartCoroutine(FadePanelOnce(
+                        panel:        fadePanel,
+                        inDuration:   finalFadeOut,
+                        hold:         0f,
+                        outDuration:  0f,         // 페이드 인 없음
+                        maxAlpha:     1f,
+                        onReachedMax: () =>
+                        {
+                            uiManager.LoadCanvas(mainHomeCanvas, introCanvas);
+                            // 전환 직후 인트로 완전 종료 (입력/코루틴/업데이트 차단)
+                            ShutdownIntro();
+                        },
+                        deactivateAtEnd: true,
+                        lockInput:       true
+                    ));
+                }
+                else
+                {
+                    uiManager.LoadCanvas(mainHomeCanvas, introCanvas);
+                    ShutdownIntro();
+                }
             }
         }
     }
@@ -109,35 +116,44 @@ public class IntroCutSceneManagement : MonoBehaviour
         switch (step)
         {
             case 1:
-                SafeSetActive(scene1Background, true);
+                // 인트로 씬 1 텍스트(배경+텍스트) 페이드 인
                 isAnimating = true;
-                scene1Text.DOFade(1f, 1f).OnComplete(() => isAnimating = false);
+                FadeBothIn(scene1Text, 1f, () => isAnimating = false);
                 break;
 
             case 2:
+                // 1번 텍스트(배경+텍스트) 페이드 아웃 → 2번 텍스트(배경+텍스트) 페이드 인
                 isAnimating = true;
-                scene1Text.DOFade(0f, 0.5f).OnComplete(() =>
+                FadeBothOut(scene1Text, 0.5f, () =>
                 {
-                    scene2Text.DOFade(1f, 1f).OnComplete(() => isAnimating = false);
+                    FadeBothIn(scene2Text, 1f, () => isAnimating = false);
                 });
                 break;
 
             case 3:
-                StartCoroutine(FlashRoutine(3, 0.2f));
+                // 섬광 + 공격당하는 씬 배경 활성화
+                StartCoroutine(FadePanelOnce(
+                    panel: flashPanel, inDuration: flashIn, hold: flashHold, outDuration: flashOut,
+                    maxAlpha: 1f, onReachedMax: null, deactivateAtEnd: true, lockInput: true
+                ));
+                SafeSetActive(sceneAttackBackground, true);
                 break;
 
             case 4:
-                SafeSetActive(sceneAttackBackground, true);
+                // 섬광 + waitPanel 활성화
+                StartCoroutine(FadePanelOnce(
+                    panel: flashPanel, inDuration: flashIn, hold: flashHold, outDuration: flashOut,
+                    maxAlpha: 1f, onReachedMax: null, deactivateAtEnd: true, lockInput: true
+                ));
                 SafeSetActive(waitPanel, true);
-                StartCoroutine(FlashRoutine(3, 0.2f));
                 break;
 
             case 5:
-                SafeSetActive(chunsun_1, true);
+                SafeSetActive(chunsoon_1, true);
                 break;
 
             case 6:
-                SafeSetActive(chunsun_2, true);
+                SafeSetActive(chunsoon_2, true);
                 break;
 
             case 7:
@@ -147,75 +163,176 @@ public class IntroCutSceneManagement : MonoBehaviour
             case 8:
                 SafeSetActive(player_2, true);
                 isAnimating = true;
-                playerText.DOFade(1f, 1f).OnComplete(() => isAnimating = false);
-                break;
-
-            default:
+                //FadeBothIn(playerText, 1f, () => isAnimating = false);
+                Sequence sequence = DOTween.Sequence();
+                sequence.Append(playerText.DOFade(1f, 1));
+                sequence.OnComplete(() =>
+                {
+                    isAnimating = false;
+                });
                 break;
         }
     }
 
-    System.Collections.IEnumerator FlashRoutine(int times, float eachFade)
+    // ================== 공용 페이드(검정/섬광) ==================
+    System.Collections.IEnumerator FadePanelOnce(
+        GameObject panel,
+        float inDuration,
+        float hold,
+        float outDuration,
+        float maxAlpha = 1f,
+        System.Action onReachedMax = null,
+        bool deactivateAtEnd = true,
+        bool lockInput = false
+    )
     {
-        isAnimating = true;
-        if (flashPanel == null) { isAnimating = false; yield break; }
+        if (panel == null) yield break;
 
-        var cg = flashPanel.GetComponent<CanvasGroup>();
-        flashPanel.SetActive(true);
+        var cg = panel.GetComponent<CanvasGroup>();
+        if (cg == null) cg = panel.AddComponent<CanvasGroup>();
 
-        for (int i = 0; i < times; i++)
-        {
-            cg.alpha = 0f;
-            yield return cg.DOFade(1f, eachFade).WaitForCompletion();
-            yield return cg.DOFade(0f, eachFade).WaitForCompletion();
-        }
+        if (lockInput) isAnimating = true;
 
-        flashPanel.SetActive(false);
-        isAnimating = false;
-    }
-
-    System.Collections.IEnumerator FadeToMainHome()
-    {
-        isAnimating = true;
-
-        if (fadePanel == null)
-        {
-            // 예비 처리: 패널 없으면 바로 전환
-            uiManager.LoadCanvas(mainHomeCanvas, introCanvas);
-            isAnimating = false;
-            yield break;
-        }
-
-        var cg = fadePanel.GetComponent<CanvasGroup>();
-        fadePanel.SetActive(true);
+        panel.SetActive(true);
         cg.alpha = 0f;
 
-        // 검은 화면으로 페이드 아웃
-        yield return cg.DOFade(1f, 0.5f).WaitForCompletion();
+        // 1) 페이드 인(0 → max)
+        yield return cg.DOFade(maxAlpha, Mathf.Max(0f, inDuration))
+                      .SetEase(Ease.OutExpo)
+                      .WaitForCompletion();
 
-        // 메인 홈으로 전환
-        uiManager.LoadCanvas(mainHomeCanvas, introCanvas);
+        onReachedMax?.Invoke();
 
-        // 바로 패널 비활성화 → 메인 홈 UI가 즉시 보임
-        fadePanel.SetActive(false);
+        // 2) 유지
+        if (hold > 0f) yield return new WaitForSeconds(hold);
 
+        // 3) 페이드 아웃 또는 즉시 종료
+        if (outDuration > 0f)
+        {
+            yield return cg.DOFade(0f, outDuration)
+                           .SetEase(Ease.InQuad)
+                           .WaitForCompletion();
+            if (deactivateAtEnd) panel.SetActive(false);
+        }
+        else
+        {
+            if (deactivateAtEnd) panel.SetActive(false);
+        }
+
+        if (lockInput) isAnimating = false;
+    }
+
+    // =========== 배경(Image) + 텍스트(TMP) 동시 페이드 ===========
+    Image GetBgOf(TextMeshProUGUI tmp)
+    {
+        if (tmp == null || tmp.transform.parent == null) return null;
+        return tmp.transform.parent.GetComponent<Image>();
+    }
+
+    void InitBothHidden(TextMeshProUGUI tmp)
+    {
+        if (tmp == null) return;
+        var bg = GetBgOf(tmp);
+
+        tmp.alpha = 0f;
+        if (bg != null)
+        {
+            var c = bg.color; c.a = 0f; bg.color = c;
+            bg.raycastTarget = false; // 안 보일 때 클릭 통과
+        }
+    }
+
+    void FadeBothIn(TextMeshProUGUI tmp, float duration, System.Action onComplete = null)
+    {
+        if (tmp == null) { onComplete?.Invoke(); return; }
+        var bg = GetBgOf(tmp);
+
+        var seq = DOTween.Sequence()
+                         .Join(tmp.DOFade(1f, duration));
+
+        if (bg != null)
+        {
+            var c = bg.color; c.a = 0f; bg.color = c;
+            bg.raycastTarget = true;            // 보이는 동안 클릭 막기 원하면 true 유지
+            seq.Join(bg.DOFade(1f, duration));
+        }
+
+        seq.OnComplete(() => onComplete?.Invoke());
+    }
+
+    void FadeBothOut(TextMeshProUGUI tmp, float duration, System.Action onComplete = null)
+    {
+        if (tmp == null) { onComplete?.Invoke(); return; }
+        var bg = GetBgOf(tmp);
+
+        var seq = DOTween.Sequence()
+                         .Join(tmp.DOFade(0f, duration));
+
+        if (bg != null)
+            seq.Join(bg.DOFade(0f, duration));
+
+        seq.OnComplete(() =>
+        {
+            if (bg != null) bg.raycastTarget = false;
+            onComplete?.Invoke();
+        });
+    }
+
+    // ================== 초기화/종료 & 유틸 ==================
+    void ResetIntroState()
+    {
+        // 인트로는 TitleCanvas의 Start 버튼으로 LoadCanvas 호출 시에만 시작됨
+        shutDown     = false;
+        isAnimating  = false;
+        currentStep  = 0;
+
+        // 네 의도대로: 시작 시 1번 배경은 켜두고, 나머지는 끔
+        SafeSetActive(scene1Background, true);
+
+        SafeSetActive(flashPanel, false);
+        SafeSetActive(sceneAttackBackground, false);
+        SafeSetActive(waitPanel, false);
+
+        SafeSetActive(chunsoon_1, false);
+        SafeSetActive(chunsoon_2, false);
+        SafeSetActive(player_1, false);
+        SafeSetActive(player_2, false);
+
+        // 텍스트/배경 알파 0으로 초기화
+        InitBothHidden(scene1Text);
+        InitBothHidden(scene2Text);
+        InitBothHidden(playerText);
+
+        EnsureCanvasGroup(flashPanel);
+        EnsureCanvasGroup(fadePanel);
+        if (fadePanel != null) fadePanel.SetActive(false);
+    }
+
+    /// <summary>인트로 입력/코루틴 완전 종료</summary>
+    void ShutdownIntro()
+    {
+        if (shutDown) return;
+        shutDown    = true;
         isAnimating = false;
+        StopAllCoroutines();
+        // 이 스크립트는 IntroCanvas가 꺼지면 함께 꺼지므로 enabled=false는 선택
+        // enabled = false;
     }
 
-    // -------- 유틸 --------
-    void SafeSetActive(GameObject go, bool active)
+    /// <summary>스킵 버튼 OnClick에 UIManager.LoadCanvas 다음으로 연결하면 더 안전</summary>
+    public void OnSkipFinalize()
     {
-        if (go != null) go.SetActive(active);
-    }
-
-    void SafeSetAlpha(TextMeshProUGUI tmp, float a)
-    {
-        if (tmp != null) tmp.alpha = a;
+        ShutdownIntro();
     }
 
     void EnsureCanvasGroup(GameObject go)
     {
         if (go == null) return;
         if (go.GetComponent<CanvasGroup>() == null) go.AddComponent<CanvasGroup>();
+    }
+
+    void SafeSetActive(GameObject go, bool active)
+    {
+        if (go != null) go.SetActive(active);
     }
 }
