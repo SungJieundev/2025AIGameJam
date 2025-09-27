@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
 
     public InGameUI inGameUI;
 
-    private int _playerStartMoney = 150;
+    private int _playerStartMoney = 1000;
     [HideInInspector] public int _playerMaxMoney;
     private int _playerIncomePerSecond;
     [HideInInspector] public int _playerIncomeLevel;
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     #region Game
     public void ResetGame()
     {
-        _playerMaxMoney = 150;
+        _playerMaxMoney = 1000;
         playerCurMoney = _playerStartMoney;
         _playerIncomePerSecond = 12;
         _playerIncomeLevel = 0;

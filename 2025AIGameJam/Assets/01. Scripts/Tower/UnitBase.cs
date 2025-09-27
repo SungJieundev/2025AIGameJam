@@ -8,6 +8,7 @@ public class UnitBase : PoolableMono
     public UnitSO unitSO;
     private UnitStat unitStat;
     public Transform firePoint;
+    public GameObject effect;
 
     [HideInInspector] public Rigidbody2D rb;
     public Animator anim;
@@ -15,7 +16,7 @@ public class UnitBase : PoolableMono
     public Vector2 dir;
     public float lastAttackTime = -999f;
     [HideInInspector] public Transform target;
-    [HideInInspector] public float scanInterval = 0.05f;
+    [HideInInspector] public float scanInterval = 0.02f;
     public float scanTimer;
     public float dathKnockDist = 0.7f;
     public float deathKnockTime = 0.25f;

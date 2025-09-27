@@ -23,12 +23,16 @@ MonoBehaviour:
   unitRealImage: {fileID: 0}
   unitHp: 400
   unitDamage: 60
-  unitRange: 2
+  unitRange: 4
   unitMoveSpeed: 0.5
-  unitAttackSpeed: 0.333
+  unitAttackSpeed: 0.2
   attackKind: 1
   projectile: {fileID: 0}
   aoeRange: 0
-  aoeRadius: 3
+  aoeRadius: 2
   rangeHitDelay: 0
-  meleeHitDelay: 1
+  meleeHitDelay: 1.5
+  Hit1Deley: 0
+  Hit2Deley: 0
+  Hit3Deley: 0
+  Hit4Deley: 0
