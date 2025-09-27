@@ -18,6 +18,7 @@ public class UnitSO : ScriptableObject
     public float    unitMoveSpeed;
     public float    unitAttackSpeed;
 
+
     [Header("Attack")]
     public Enums.AttackKind attackKind;
     [Tooltip("원거리일 때 투사체 프리팹(선택)")]

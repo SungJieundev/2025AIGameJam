@@ -54,6 +54,8 @@ class MeleeSingleBehaviour : IAttackBehaviour
     IEnumerator Hit(UnitBase u)
     {
         yield return new WaitForSeconds(Mathf.Max(0f, so.meleeHitDelay));
+        if (u.effect != null)
+            u.effect.SetActive(true);
         OnHit(u);
         End(u);
     }
@@ -68,7 +70,13 @@ class MeleeSingleBehaviour : IAttackBehaviour
             t.TakeDamage(u.GetUnitStat().unitTotalDamage);
     }
 
-    public void End(UnitBase u) { u.isAttacking = false;}
+    public void End(UnitBase u)
+    {
+        u.isAttacking = false;
+        if (u.effect != null)
+            u.effect.SetActive(false);
+        u.ScanTarget();
+    }
 }
 
 class MeleeAOEBehaviour : IAttackBehaviour
@@ -99,6 +107,8 @@ class MeleeAOEBehaviour : IAttackBehaviour
     IEnumerator Hit(UnitBase u)
     {
         yield return new WaitForSeconds(Mathf.Max(0f, so.meleeHitDelay));
+        if (u.effect != null)
+            u.effect.SetActive(true);
         OnHit(u);
         End(u);
     }
@@ -106,6 +116,8 @@ class MeleeAOEBehaviour : IAttackBehaviour
     public void OnHit(UnitBase u)
     {
         Vector2 center = (Vector2)u.transform.position + u.dir * (so.unitRange * 0.5f);
+        Debug.DrawLine(u.transform.position, center, Color.green, 0.5f);              // 공격 중심점까지 선
+        DrawCircle(center, so.aoeRadius, Color.green, 0.5f);
         int count = Physics2D.OverlapCircleNonAlloc(center, so.aoeRadius, hits, u.enemyMask);
         for (int i = 0; i < count; i++)
         {
@@ -117,7 +129,28 @@ class MeleeAOEBehaviour : IAttackBehaviour
         }
     }
 
-    public void End(UnitBase u) { u.isAttacking = false;}
+    public void End(UnitBase u)
+    {
+        u.isAttacking = false;
+        if (u.effect != null)
+            u.effect.SetActive(false);
+        u.ScanTarget();
+    }
+
+    void DrawCircle(Vector2 center, float radius, Color color, float duration)
+    {
+        int segments = 32;
+        float angle = 0f;
+        Vector3 prevPoint = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+
+        for (int i = 1; i <= segments; i++)
+        {
+            angle = i * 2 * Mathf.PI / segments;
+            Vector3 newPoint = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+            Debug.DrawLine(prevPoint, newPoint, color, duration);
+            prevPoint = newPoint;
+        }
+    }
 }
 
 class RangedSingleBehaviour : IAttackBehaviour
@@ -157,7 +190,6 @@ class RangedSingleBehaviour : IAttackBehaviour
         var proj = PoolManager.Instance.Pop(so.projectile.name);
         proj.gameObject.GetComponent<Projectile>().Init(u);
         proj.transform.position = u.firePoint.position;
-        Debug.Log("원거리 공격");
     }
 
     public void End(UnitBase u) { u.isAttacking = false; }
@@ -197,6 +229,7 @@ class RangedAOEBehaviour : IAttackBehaviour
     {
         Vector2 center = (Vector2)u.transform.position + u.dir * so.aoeRange;
         Debug.DrawLine(u.transform.position, center, Color.red, 0.5f);
+        DrawCircle(center, so.aoeRadius, Color.red, 0.5f);
         int count = Physics2D.OverlapCircleNonAlloc(center, so.aoeRadius, hits, u.enemyMask);
         for (int i = 0; i < count; i++)
         {
@@ -209,7 +242,26 @@ class RangedAOEBehaviour : IAttackBehaviour
             
         
     }
-    public void End(UnitBase u) { u.isAttacking = false; }
+    public void End(UnitBase u)
+    {
+        u.isAttacking = false;
+        u.ScanTarget();
+    }
+
+    void DrawCircle(Vector2 center, float radius, Color color, float duration)
+    {
+        int segments = 32;
+        float angle = 0f;
+        Vector3 prevPoint = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+
+        for (int i = 1; i <= segments; i++)
+        {
+            angle = i * 2 * Mathf.PI / segments;
+            Vector3 newPoint = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+            Debug.DrawLine(prevPoint, newPoint, color, duration);
+            prevPoint = newPoint;
+        }
+    }
 }
 
 class ProtocolBehaviour : IAttackBehaviour
