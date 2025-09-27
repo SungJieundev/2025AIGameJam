@@ -5,6 +5,7 @@ using UnityEngine;
 public class Projectile : PoolableMono
 {
     public float damage;
+    public float range;
     public UnitBase owner;
     public string targetTag;
 
@@ -26,8 +27,18 @@ public class Projectile : PoolableMono
     {
         owner = u;
         damage = owner.GetUnitStat().unitTotalDamage;
+        range = owner.GetUnitStat().unitRange;
         prodir = owner.dir;;
         rb.velocity = new Vector2(10 * prodir.x, 0);
+    }
+
+    private void Update()
+    {
+        if (Vector2.Distance(transform.position, owner.transform.position) >= range)
+        {
+            rb.velocity = Vector2.zero;
+            PoolManager.Instance.Push(this);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -38,6 +49,11 @@ public class Projectile : PoolableMono
             {
                 d.TakeDamage(damage);
                 Debug.Log($"{d.name} -{damage}");
+            }
+            else if (collision.TryGetComponent<GameTarget>(out var t))
+            {
+                t.TakeDamage(damage);
+                Debug.Log($"{t.name} - {damage}");
             }
             rb.velocity = Vector2.zero;
             PoolManager.Instance.Push(this);

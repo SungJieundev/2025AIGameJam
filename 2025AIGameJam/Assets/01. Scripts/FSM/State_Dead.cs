@@ -40,8 +40,7 @@ public class State_Dead : IState
         if (a >= 1f)
         {
             u.pendingDeath = false;
-            // Ç® º¹±Í
-            u.gameObject.SetActive(false);
+            PoolManager.Instance.Push(u);
         }
     }
 

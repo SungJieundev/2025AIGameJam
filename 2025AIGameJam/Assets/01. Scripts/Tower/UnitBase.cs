@@ -14,7 +14,7 @@ public class UnitBase : PoolableMono
     public Vector2 dir;
     public float lastAttackTime = -999f;
     [HideInInspector] public Transform target;
-    [HideInInspector] public float scanInterval = 0.1f;
+    [HideInInspector] public float scanInterval = 0.05f;
     public float scanTimer;
     public float dathKnockDist = 0.7f;
     public float deathKnockTime = 0.25f;
@@ -79,26 +79,15 @@ public class UnitBase : PoolableMono
     public void ScanTarget()
     {
         target = null;
-        Vector2 center = (Vector2)transform.position + dir * (unitStat.unitRange * 0.5f);
-        Collider2D[] results = new Collider2D[8];
+        Vector2 origin = transform.position;
+        RaycastHit2D hit = Physics2D.Raycast(origin, dir, GetUnitStat().unitRange, enemyMask);
 
-        int count = Physics2D.OverlapCircleNonAlloc(center, unitStat.unitRange, results, enemyMask);
-        
-        float best = float.MaxValue;
-
-        for (int i = 0; i < count; i++)
-        {
-            var c = results[i];
-            if (!c) continue;
-
-            float dx = Mathf.Abs(c.transform.position.x - transform.position.x);
-
-            if (dx < best)
-            {
-                best = dx;
-                target = c.transform;
-            }
-        }
+        if (hit.collider && hit.collider.TryGetComponent<UnitBase>(out var enemy))
+            target = enemy.transform;
+        else if (hit.collider && hit.collider.TryGetComponent<GameTarget>(out var target))
+            this.target = target.transform;
+        else
+            target = null;
     }
 
     public bool InAttackRange(Transform t, float rangeOverride = -1f)
@@ -133,11 +122,6 @@ public class UnitBase : PoolableMono
             GoDead();
         }
     }
-
-    public void Die()
-    {
-        Debug.Log("Å¸¿ö »ç¸Á");
-    }
     #endregion
 
     public override void Reset()
@@ -149,13 +133,13 @@ public class UnitBase : PoolableMono
         if (!Application.isPlaying)
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(dir, unitSO ? unitSO.unitRange : 1f);
+            Gizmos.DrawWireSphere(dir, unitSO ? unitStat.unitRange * .5f : 1f);
         }
         else
         {
             Vector2 c = (Vector2)transform.position + dir * (unitStat.unitRange * .5f);
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(c, unitStat.unitRange);
+            Gizmos.DrawWireSphere(c, unitStat.unitRange * .5f);
         }
     }
 }

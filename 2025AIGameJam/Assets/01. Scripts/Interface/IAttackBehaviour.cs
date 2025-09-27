@@ -60,9 +60,12 @@ class MeleeSingleBehaviour : IAttackBehaviour
         if (u.target && u.InAttackRange(u.target, so.unitRange) &&
             u.target.TryGetComponent<UnitBase>(out var d))
             d.TakeDamage(u.GetUnitStat().unitTotalDamage);
+        else if (u.target && u.InAttackRange(u.target, so.unitRange) &&
+            u.target.TryGetComponent<GameTarget>(out var t))
+            t.TakeDamage(u.GetUnitStat().unitTotalDamage);
     }
 
-    public void End(UnitBase u) { u.isAttacking = false; }
+    public void End(UnitBase u) { u.isAttacking = false; u.ScanTarget(); }
 }
 
 class MeleeAOEBehaviour : IAttackBehaviour
@@ -74,7 +77,7 @@ class MeleeAOEBehaviour : IAttackBehaviour
     public bool CanExecute(UnitBase u)
     {
         Vector2 center = (Vector2)u.transform.position + u.dir * (so.unitRange * 0.5f);
-        int count = Physics2D.OverlapCircleNonAlloc(center, so.unitRange, hits, u.enemyMask);
+        int count = Physics2D.OverlapCircleNonAlloc(center, so.unitRange * 0.5f, hits, u.enemyMask);
         float cd = 1f / u.GetUnitStat().unitAttackSpeed;
         return count > 0 && (Time.time - u.lastAttackTime >= cd);
     }
@@ -98,14 +101,19 @@ class MeleeAOEBehaviour : IAttackBehaviour
 
     public void OnHit(UnitBase u)
     {
-        Vector2 center = (Vector2)u.transform.position + u.dir * (so.aoeRadius * 0.5f);
+        Vector2 center = (Vector2)u.transform.position + u.dir * (so.unitRange * 0.5f);
         int count = Physics2D.OverlapCircleNonAlloc(center, so.aoeRadius, hits, u.enemyMask);
         for (int i = 0; i < count; i++)
+        {
             if (hits[i] && hits[i].TryGetComponent<UnitBase>(out var d))
                 d.TakeDamage(u.GetUnitStat().unitTotalDamage);
+
+            if (hits[i] && hits[i].TryGetComponent<GameTarget>(out var t))
+                t.TakeDamage(u.GetUnitStat().unitTotalDamage);
+        }
     }
 
-    public void End(UnitBase u) { u.isAttacking = false; }
+    public void End(UnitBase u) { u.isAttacking = false; u.ScanTarget(); }
 }
 
 class RangedSingleBehaviour : IAttackBehaviour
@@ -142,7 +150,7 @@ class RangedSingleBehaviour : IAttackBehaviour
         Debug.Log("원거리 공격");
     }
 
-    public void End(UnitBase u) { u.isAttacking = false; }
+    public void End(UnitBase u) { u.isAttacking = false; u.ScanTarget(); }
 }
 
 class RangedAOEBehaviour : IAttackBehaviour
@@ -180,9 +188,15 @@ class RangedAOEBehaviour : IAttackBehaviour
         Debug.DrawLine(u.transform.position, center, Color.red, 0.5f);
         int count = Physics2D.OverlapCircleNonAlloc(center, so.aoeRadius, hits, u.enemyMask);
         for (int i = 0; i < count; i++)
+        {
             if (hits[i] && hits[i].TryGetComponent<UnitBase>(out var d))
                 d.TakeDamage(u.GetUnitStat().unitTotalDamage);
+
+            if (hits[i] && hits[i].TryGetComponent<GameTarget>(out var t))
+                t.TakeDamage(u.GetUnitStat().unitTotalDamage);
+        }
+            
         
     }
-    public void End(UnitBase u) { u.isAttacking = false; }
+    public void End(UnitBase u) { u.isAttacking = false; u.ScanTarget(); }
 }

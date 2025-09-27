@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdcb5f60e0be6d94bbcdb4af20924a8c, type: 3}
+  m_Name: MK-4
+  m_EditorClassIdentifier: 
+  unitId: 4
+  unitName: KG-4
+  unitDesc: "\uC774\uB984\uC774 \uC5B4\uB5A4 \uC778\uC99D\uB9C8\uD06C\uB97C \uB2EE\uC740
+    \uAF43\uAC8C \uBA54\uCE74\uC774\uB2E4.\r\n\uD314\uC744 \uB298\uB824\uC11C \uACF5\uACA9\uD55C\uB2E4.\r\n\uC5B4\uC9F8\uC11C\uC778\uC9C0
+    \uD314\uC774 \uB298\uC5B4\uB0A0\uB54C\r\n\uACE0\uBB34\uACE0\uBB34-!\uB97C \uC678\uCE5C\uB2E4\uACE0\uD55C\uB2E4.
+    (\uBC94\uC704 \uACF5\uACA9)"
+  unitPrice: 200
+  unitRealImage: {fileID: 0}
+  unitHp: 200
+  unitDamage: 50
+  unitRange: 2
+  unitMoveSpeed: 1
+  unitAttackSpeed: 0.25
+  attackKind: 1
+  projectile: {fileID: 0}
+  aoeRange: 0
+  aoeRadius: 3
+  rangeHitDelay: 0
+  meleeHitDelay: 0.5

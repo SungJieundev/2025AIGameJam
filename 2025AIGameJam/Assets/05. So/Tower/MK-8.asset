@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdcb5f60e0be6d94bbcdb4af20924a8c, type: 3}
+  m_Name: MK-8
+  m_EditorClassIdentifier: 
+  unitId: 8
+  unitName: DR-8
+  unitDesc: "\uD504\uB85C\uD1A0\uCF5C \uB2E4\uC74C\uC73C\uB85C \uAC00\uC7A5 \uAC15\uB825\uD55C
+    \uB3C4\uB871\uB1FD \uBA54\uCE74.\r\n\uAC15\uB825\uD55C \uBE0C\uB808\uC2A4\uB97C
+    \uBC1C\uC0AC\uD574 \uC801\uC5D0\uAC8C \uACF5\uACA9\uD55C\uB2E4.\r\n\uC790\uC2E0\uC5D0\uAC8C
+    \uB0A0\uAC1C\uAC00 \uC788\uB2E4\uACE0 \uAD73\uAC8C \uBBFF\uACE0\uC788\uB2E4.(\uBC94\uC704
+    \uACF5\uACA9)"
+  unitPrice: 400
+  unitRealImage: {fileID: 0}
+  unitHp: 800
+  unitDamage: 150
+  unitRange: 5
+  unitMoveSpeed: 1.2
+  unitAttackSpeed: 0.5
+  attackKind: 1
+  projectile: {fileID: 0}
+  aoeRange: 0
+  aoeRadius: 5
+  rangeHitDelay: 0
+  meleeHitDelay: 0.5

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdcb5f60e0be6d94bbcdb4af20924a8c, type: 3}
+  m_Name: Player
+  m_EditorClassIdentifier: 
+  unitId: 0
+  unitName: 
+  unitDesc: 
+  unitPrice: 0
+  cooldown: 0
+  unitRealImage: {fileID: 0}
+  unitHp: 0
+  unitDamage: 0
+  unitRange: 0
+  unitMoveSpeed: 0
+  unitAttackSpeed: 0
+  attackKind: 0
+  projectile: {fileID: 0}
+  aoeRange: 0
+  aoeRadius: 0
+  rangeHitDelay: 0
+  meleeHitDelay: 0

@@ -24,7 +24,7 @@ public class State_March : IState
             scanTimer = u.scanInterval;
         }
 
-        if (u.target && u.InAttackRange(u.target))
+        if (u.InAttackRange(u.target))
         {
             u.GoAttack();
         }

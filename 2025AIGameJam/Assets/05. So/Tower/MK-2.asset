@@ -10,20 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bdcb5f60e0be6d94bbcdb4af20924a8c, type: 3}
-  m_Name: New TowerSO
+  m_Name: MK-2
   m_EditorClassIdentifier: 
-  unitId: 1
-  unitName: "\uD14C\uC2A4\uD2B8\uC6A9 \uD0C0\uC6CC"
-  unitDesc: "\uD14C\uC2A4\uD2B8\uC6A9 \uD0C0\uC6CC"
+  unitId: 2
+  unitName: HM-2
+  unitDesc: "\uD478\uB978 \uBE5B\uC774 \uB9F4\uB3C4\uB294 \uD574\uB9C8 \uBA54\uCE74\r\n\uC5B4\uB5BB\uAC8C
+    \uBED8\uC5D0 \uD574\uB9C8\uAC00 \uC0AC\uB0D0\uACE0 \uBB3B\uC9C0\uB9CC\r\n\uC815\uB9D0
+    \uC0B4\uACE0\uC788\uB2E4\uACE0 \uD55C\uB2E4.\r\n(\uB2E8\uC77C \uACF5\uACA9)"
+  unitPrice: 100
   unitRealImage: {fileID: 0}
-  unitHp: 100
-  unitDamage: 1
-  unitRange: 7
-  unitMoveSpeed: 3
+  unitHp: 70
+  unitDamage: 30
+  unitRange: 3
+  unitMoveSpeed: 1
   unitAttackSpeed: 1
-  attackKind: 3
+  attackKind: 2
   projectile: {fileID: 7501395589532697553, guid: 08be55221309eb943950262d58797cb9, type: 3}
-  aoeRange: 5
-  aoeRadius: 1
-  rangeHitDelay: 2
-  meleeHitDelay: 0.1
+  aoeRange: 0
+  aoeRadius: 0
+  rangeHitDelay: 0
+  meleeHitDelay: 0

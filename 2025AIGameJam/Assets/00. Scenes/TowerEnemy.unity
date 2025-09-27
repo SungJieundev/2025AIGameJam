@@ -704,6 +704,13 @@ MonoBehaviour:
   - {fileID: 497018073}
   towerList:
   - {fileID: 2275561626910034003, guid: 7b896ed9eb8234f49b916e1b18316304, type: 3}
+  - {fileID: 2275561626910034003, guid: 2c3ad63db2496dd4aa81d4a05c0bc528, type: 3}
+  - {fileID: 2275561626910034003, guid: af6c5c15a933e3a45a8b316e075bbfcc, type: 3}
+  - {fileID: 2275561626910034003, guid: 06cc0eedcc60aa44b956255eb1ccaa33, type: 3}
+  - {fileID: 2275561626910034003, guid: b15918ad46252a44c8542668ffe0b053, type: 3}
+  - {fileID: 2275561626910034003, guid: a94bc9e3dd7a59e4bba6d565ea1ee075, type: 3}
+  - {fileID: 2275561626910034003, guid: 06e598dad062baa40a756f6af730aacb, type: 3}
+  - {fileID: 2275561626910034003, guid: 99d8cc59819e1b542b80a0476ab0630f, type: 3}
 --- !u!4 &1405467121
 Transform:
   m_ObjectHideFlags: 0

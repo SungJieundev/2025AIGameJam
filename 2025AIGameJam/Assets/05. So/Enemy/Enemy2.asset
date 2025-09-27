@@ -10,18 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bdcb5f60e0be6d94bbcdb4af20924a8c, type: 3}
-  m_Name: TestEnemy
+  m_Name: Enemy2
   m_EditorClassIdentifier: 
-  unitId: 11
-  unitName: "\uD14C\uC2A4\uD2B8\uC6A9 \uC801"
-  unitDesc: "\uD14C\uC2A4\uD2B8\uC6A9 \uC801"
+  unitId: 12
+  unitName: "\uC624\uC218\uB2EC"
+  unitDesc: "\uC624\uC218\uB2EC"
+  unitPrice: 0
   unitRealImage: {fileID: 0}
-  unitHp: 10
-  unitDamage: 1
+  unitHp: 150
+  unitDamage: 40
   unitRange: 2
-  unitMoveSpeed: 1
+  unitMoveSpeed: 4
   unitAttackSpeed: 1
   attackKind: 0
   projectile: {fileID: 0}
+  aoeRange: 0
   aoeRadius: 0
-  meleeHitDelay: 0.1
+  rangeHitDelay: 0
+  meleeHitDelay: 0.5

@@ -10,18 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bdcb5f60e0be6d94bbcdb4af20924a8c, type: 3}
-  m_Name: TestEnemy 2
+  m_Name: MK-7
   m_EditorClassIdentifier: 
-  unitId: 11
-  unitName: "\uD14C\uC2A4\uD2B8\uC6A9 \uC801"
-  unitDesc: "\uD14C\uC2A4\uD2B8\uC6A9 \uC801"
+  unitId: 7
+  unitName: NG-7
+  unitDesc: "\uBA4B\uC9C4 \uBC29\uD328\uB97C \uAC00\uC9C0\uACE0 \uC788\uB294 \uB18D\uAC8C
+    \uBA54\uCE74.\r\n\uBC29\uD328\uB85C \uB9C9\uC9C0\uB294 \uC54A\uACE0 \uACF5\uACA9\uD560\uB54C\uC5D0\uB9CC
+    \uC4F4\uB2E4.(\uB2E8\uC77C \uACF5\uACA9)"
+  unitPrice: 350
   unitRealImage: {fileID: 0}
-  unitHp: 10
-  unitDamage: 1
+  unitHp: 600
+  unitDamage: 50
   unitRange: 2
   unitMoveSpeed: 1
-  unitAttackSpeed: 1
+  unitAttackSpeed: 0.5
   attackKind: 0
   projectile: {fileID: 0}
+  aoeRange: 0
   aoeRadius: 0
-  meleeHitDelay: 0.1
+  rangeHitDelay: 0
+  meleeHitDelay: 0.5

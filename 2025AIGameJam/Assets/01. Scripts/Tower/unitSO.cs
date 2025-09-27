@@ -9,6 +9,8 @@ public class UnitSO : ScriptableObject
     public int      unitId;
     public string   unitName;
     [TextArea]public string   unitDesc;
+    public int      unitPrice;
+    public float    cooldown;
     public Sprite   unitRealImage;
     public float    unitHp;
     public float    unitDamage;
