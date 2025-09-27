@@ -17,7 +17,6 @@ public class State_Spawn : IState
 
     public void OnEnter()
     {
-        Debug.Log("Spawn");
         t = 0f;
         u.rb.velocity = Vector2.zero;
     }

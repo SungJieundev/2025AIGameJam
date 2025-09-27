@@ -48,12 +48,10 @@ public class Projectile : PoolableMono
             if (collision.TryGetComponent<UnitBase>(out var d))
             {
                 d.TakeDamage(damage);
-                Debug.Log($"{d.name} -{damage}");
             }
             else if (collision.TryGetComponent<GameTarget>(out var t))
             {
                 t.TakeDamage(damage);
-                Debug.Log($"{t.name} - {damage}");
             }
             rb.velocity = Vector2.zero;
             PoolManager.Instance.Push(this);
