@@ -157,7 +157,6 @@ class RangedSingleBehaviour : IAttackBehaviour
         var proj = PoolManager.Instance.Pop(so.projectile.name);
         proj.gameObject.GetComponent<Projectile>().Init(u);
         proj.transform.position = u.firePoint.position;
-        Debug.Log("원거리 공격");
     }
 
     public void End(UnitBase u) { u.isAttacking = false; }

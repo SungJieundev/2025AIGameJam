@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -11,10 +12,15 @@ public class GameManager : MonoBehaviour
     public int buildingMaxHp;
     public int playerCurMoney { get; private set; }
 
-    private int _playerStartMoney = 1000;
-    private int _playerMaxMoney;
+    public InGameUI inGameUI;
+
+    private int _playerStartMoney = 150;
+    [HideInInspector] public int _playerMaxMoney;
     private int _playerIncomePerSecond;
-    private int _playerIncomeLevel;
+    [HideInInspector] public int _playerIncomeLevel;
+
+    public int damageUpgradeLevel = 0;
+    public event Action<int> OnTowerDamageUpgrade;
 
     [SerializeField] private PoolingListSO _initPoolList;
 
@@ -32,21 +38,25 @@ public class GameManager : MonoBehaviour
         StartCoroutine(PlayerIncome());
     }
 
-    private void Update()
+    public void IncreaseDamageLevel()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            PlayerIncomeLevelUp();
-        }
+        if (playerCurMoney < (damageUpgradeLevel + 1) * 150) return;
+
+        UseMoney(damageUpgradeLevel * 150);
+        damageUpgradeLevel++;
+        OnTowerDamageUpgrade?.Invoke(damageUpgradeLevel);
+        inGameUI.UpdateTexts();
     }
 
     #region Game
     public void ResetGame()
     {
-        _playerMaxMoney = 1000;
+        _playerMaxMoney = 150;
         playerCurMoney = _playerStartMoney;
         _playerIncomePerSecond = 12;
         _playerIncomeLevel = 0;
+        damageUpgradeLevel = 0;
+        inGameUI.UpdateTexts();
 
     }
 
@@ -76,6 +86,7 @@ public class GameManager : MonoBehaviour
     public void UseMoney(int price)
     {
         playerCurMoney -= price;
+        inGameUI.UpdateTexts();
     }
 
     IEnumerator PlayerIncome()
@@ -88,7 +99,7 @@ public class GameManager : MonoBehaviour
             {
                 playerCurMoney = _playerMaxMoney; 
             }
-            Debug.Log("·¹º§ : " + _playerIncomeLevel + " / " + playerCurMoney + " / " + _playerMaxMoney);
+            inGameUI.UpdateTexts();
         }
     }
 
@@ -100,7 +111,9 @@ public class GameManager : MonoBehaviour
 
         playerCurMoney -= price;
         _playerIncomeLevel++;
-        _playerMaxMoney += 200;       
+        _playerMaxMoney += 200; 
+        inGameUI.UpdateTexts();
+
     }
     #endregion
 }

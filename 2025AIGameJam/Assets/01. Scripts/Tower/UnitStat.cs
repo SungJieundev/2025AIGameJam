@@ -41,6 +41,8 @@ public class UnitStat
 
     public void ApplyDamage()
     {
-        this.unitTotalDamage = this.unitBaseDamage + this.unitAddDamage;
+        float f = this.unitBaseDamage + this.unitAddDamage;
+        this.unitTotalDamage = (int)Mathf.Floor(f);
+        Debug.Log(unitTotalDamage);
     }
 }

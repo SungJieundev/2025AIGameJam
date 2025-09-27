@@ -57,11 +57,35 @@ public class UnitBase : PoolableMono
             unitStat = new UnitStat(unitSO);
 
         unitStat.UnitReset(unitSO);
+
+        int level = GameManager.Instance.damageUpgradeLevel;
+        if (level > 0 && gameObject.layer == LayerMask.NameToLayer("Tower"))
+        {
+            unitStat.TowerDamageUpgrade(level);
+            unitStat.ApplyDamage();
+        }
+
+        GameManager.Instance.OnTowerDamageUpgrade += HandleTowerDamageUpgrade;
+
         rb.velocity = Vector2.zero;
         lastAttackTime = -999f;
         scanTimer = 0f;
 
         fsm.SetState(sSpawn);
+    }
+
+    protected virtual void OnDisable()
+    {
+        GameManager.Instance.OnTowerDamageUpgrade -= HandleTowerDamageUpgrade;
+    }
+
+    private void HandleTowerDamageUpgrade(int level)
+    {
+        if (gameObject.layer == LayerMask.NameToLayer("Tower"))
+        {
+            unitStat.TowerDamageUpgrade(level);
+            unitStat.ApplyDamage();
+        }      
     }
 
     private void Update() => fsm.Tick();
@@ -120,7 +144,6 @@ public class UnitBase : PoolableMono
     {
         if (IsDead) return; ;
         unitStat.unitCurHp -= damage;
-        Debug.Log(gameObject.name + " 피격됨 : " + damage + "피해 입음 / 남은 체력 : " + GetUnitStat().unitCurHp);
         if (unitStat.unitCurHp <= 0)
         {
             pendingDeath = true;
