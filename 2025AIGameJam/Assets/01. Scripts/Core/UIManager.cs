@@ -66,7 +66,7 @@ public class UIManager : MonoBehaviour
     
 
     [Header("Game Tips Settings")]
-    public List<string> gameTips;            // 게임 팁 리스트
+    [TextArea] public List<string> gameTips;            // 게임 팁 리스트
     public TextMeshProUGUI tipText;          // 출력할 TMP 텍스트
     public float fadeDuration = 0.5f;        // 페이드 시간
 
