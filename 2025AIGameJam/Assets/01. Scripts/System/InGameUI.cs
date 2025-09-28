@@ -14,6 +14,7 @@ public class InGameUI : MonoBehaviour
     public TowerSpawner towerSpawner;
 
     public TowerButtonUI[] towerButtons;
+    public TowerButtonUI protocolButton;
 
     private void Start()
     {
@@ -22,6 +23,9 @@ public class InGameUI : MonoBehaviour
             UnitBase unit = towerSpawner.towerList[i].GetComponent<UnitBase>();
             towerButtons[i].Init(unit.unitSO);
         }
+
+        UnitBase protocolUnit = towerSpawner.towerList[towerSpawner.towerList.Count - 1].GetComponent<UnitBase>();
+        protocolButton.Init(protocolUnit.unitSO);
     }
     public void UpdateTexts()
     {
@@ -37,6 +41,9 @@ public class InGameUI : MonoBehaviour
             bool affordable = GameManager.Instance.playerCurMoney >= int.Parse(btn.priceText.text);
             btn.SetPriceColor(affordable);
         }
+
+        bool protocolAffordable = GameManager.Instance.curProtocolPower >= int.Parse(protocolButton.priceText.text);
+        protocolButton.SetPriceColor(protocolAffordable);
     }
 
     public void StartTowerCooldown(int index, float duration)

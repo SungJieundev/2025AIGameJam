@@ -44,7 +44,14 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < wave.count; i++ )
         {
             GameObject enemy = PoolManager.Instance.Pop(wave.enemy.name).gameObject;
-            enemy.GetComponent<SpriteRenderer>().sortingOrder = nowSortingLayer;
+            if (enemy.GetComponent<SpriteRenderer>())
+            {
+                enemy.GetComponent<SpriteRenderer>().sortingOrder = nowSortingLayer;
+            }
+            else
+            {
+                enemy.GetComponentInChildren<SpriteRenderer>().sortingOrder = nowSortingLayer;
+            }    
             enemy.transform.position = spawnPoint[nowSpawnPoint].transform.position;
             nowSpawnPoint += 1;
             nowSortingLayer -= 1;

@@ -15,7 +15,7 @@ MonoBehaviour:
   unitId: 9
   unitName: "\uD504\uB85C\uD1A0\uCF5C \uBA54\uCE74"
   unitDesc: 
-  unitPrice: 0
+  unitPrice: 1000
   cooldown: 60
   unitRealImage: {fileID: 0}
   unitHp: 3000
@@ -29,6 +29,7 @@ MonoBehaviour:
   aoeRadius: 3
   rangeHitDelay: 0
   meleeHitDelay: 0
+  attackEndDelay: 0
   Hit1Deley: 1.2
   Hit2Deley: 0.4
   Hit3Deley: 2.5

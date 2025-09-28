@@ -53,11 +53,22 @@ class MeleeSingleBehaviour : IAttackBehaviour
 
     IEnumerator Hit(UnitBase u)
     {
+        
         yield return new WaitForSeconds(Mathf.Max(0f, so.meleeHitDelay));
         if (u.effect != null)
-            u.effect.SetActive(true);
+        {
+            u.StartCoroutine(EffectOn(u));
+        }
         OnHit(u);
         End(u);
+    }
+
+    IEnumerator EffectOn(UnitBase u)
+    {
+        
+        u.effect.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        u.effect.SetActive(false);
     }
 
     public void OnHit(UnitBase u)
@@ -65,7 +76,8 @@ class MeleeSingleBehaviour : IAttackBehaviour
         if (u.target && u.InAttackRange(u.target, so.unitRange) &&
             u.target.TryGetComponent<UnitBase>(out var d))
             d.TakeDamage(u.GetUnitStat().unitTotalDamage);
-        else if (u.target && u.InAttackRange(u.target, so.unitRange) &&
+
+        if (u.target && u.InAttackRange(u.target, so.unitRange) &&
             u.target.TryGetComponent<GameTarget>(out var t))
             t.TakeDamage(u.GetUnitStat().unitTotalDamage);
     }
@@ -73,8 +85,6 @@ class MeleeSingleBehaviour : IAttackBehaviour
     public void End(UnitBase u)
     {
         u.isAttacking = false;
-        if (u.effect != null)
-            u.effect.SetActive(false);
         u.ScanTarget();
     }
 }
@@ -87,6 +97,7 @@ class MeleeAOEBehaviour : IAttackBehaviour
 
     public bool CanExecute(UnitBase u)
     {
+        u.ScanTarget();
         Vector2 center = (Vector2)u.transform.position + u.dir * (so.unitRange * 0.5f);
         int count = Physics2D.OverlapCircleNonAlloc(center, so.unitRange * 0.5f, hits, u.enemyMask);
         float cd = 1f / u.GetUnitStat().unitAttackSpeed;
@@ -106,11 +117,21 @@ class MeleeAOEBehaviour : IAttackBehaviour
 
     IEnumerator Hit(UnitBase u)
     {
-        yield return new WaitForSeconds(Mathf.Max(0f, so.meleeHitDelay));
+        yield return new WaitForSeconds(Mathf.Max(0f, so.meleeHitDelay)); 
         if (u.effect != null)
-            u.effect.SetActive(true);
+        {
+            u.StartCoroutine(EffectOn(u));
+        }
         OnHit(u);
         End(u);
+    }
+
+    IEnumerator EffectOn(UnitBase u)
+    {
+
+        u.effect.SetActive(true);
+        yield return new WaitForSeconds(so.attackEndDelay);
+        u.effect.SetActive(false);
     }
 
     public void OnHit(UnitBase u)
@@ -122,7 +143,7 @@ class MeleeAOEBehaviour : IAttackBehaviour
         for (int i = 0; i < count; i++)
         {
             if (hits[i] && hits[i].TryGetComponent<UnitBase>(out var d))
-                d.TakeDamage(u.GetUnitStat().unitTotalDamage);
+                d.TakeDamage(u.GetUnitStat().unitTotalDamage);    
 
             if (hits[i] && hits[i].TryGetComponent<GameTarget>(out var t))
                 t.TakeDamage(u.GetUnitStat().unitTotalDamage);
@@ -132,8 +153,6 @@ class MeleeAOEBehaviour : IAttackBehaviour
     public void End(UnitBase u)
     {
         u.isAttacking = false;
-        if (u.effect != null)
-            u.effect.SetActive(false);
         u.ScanTarget();
     }
 
@@ -192,7 +211,11 @@ class RangedSingleBehaviour : IAttackBehaviour
         proj.transform.position = u.firePoint.position;
     }
 
-    public void End(UnitBase u) { u.isAttacking = false; }
+    public void End(UnitBase u)
+    {
+        u.isAttacking = false;
+        u.ScanTarget();
+    }
 }
 
 class RangedAOEBehaviour : IAttackBehaviour
@@ -245,7 +268,6 @@ class RangedAOEBehaviour : IAttackBehaviour
     public void End(UnitBase u)
     {
         u.isAttacking = false;
-        u.ScanTarget();
     }
 
     void DrawCircle(Vector2 center, float radius, Color color, float duration)
@@ -271,6 +293,7 @@ class ProtocolBehaviour : IAttackBehaviour
     public ProtocolBehaviour(UnitSO so) { this.so = so; }
     public bool CanExecute(UnitBase u)
     {
+        u.ScanTarget();
         Vector2 center = (Vector2)u.transform.position + u.dir * (so.unitRange * 0.5f);
         int count = Physics2D.OverlapCircleNonAlloc(center, so.unitRange * 0.5f, hits, u.enemyMask);
         float cd = 1f / u.GetUnitStat().unitAttackSpeed;

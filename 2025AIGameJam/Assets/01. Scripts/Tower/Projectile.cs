@@ -48,6 +48,10 @@ public class Projectile : PoolableMono
             if (collision.TryGetComponent<UnitBase>(out var d))
             {
                 d.TakeDamage(damage);
+                if (owner.gameObject.layer == LayerMask.NameToLayer("Tower"))
+                {
+                    GameManager.Instance.GainProtocolPower(damage);
+                }
             }
             else if (collision.TryGetComponent<GameTarget>(out var t))
             {

@@ -28,7 +28,8 @@ MonoBehaviour:
   aoeRange: 0
   aoeRadius: 0
   rangeHitDelay: 0
-  meleeHitDelay: 0.2
+  meleeHitDelay: 0.5
+  attackEndDelay: 0
   Hit1Deley: 0
   Hit2Deley: 0
   Hit3Deley: 0

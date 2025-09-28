@@ -31,6 +31,8 @@ public class UnitSO : ScriptableObject
     public float rangeHitDelay;
     [Tooltip("근접 히트 타이밍 지연(선택)")]
     public float meleeHitDelay;
+    [Tooltip("애니메이션 종료 타이밍(선택")]
+    public float attackEndDelay;
 
     [Header("Protocol Attack")]
     [Tooltip("첫번째 공격 딜레이")]

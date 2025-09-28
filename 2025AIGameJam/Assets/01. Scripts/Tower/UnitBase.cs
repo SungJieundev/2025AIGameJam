@@ -16,11 +16,14 @@ public class UnitBase : PoolableMono
     public Vector2 dir;
     public float lastAttackTime = -999f;
     [HideInInspector] public Transform target;
-    [HideInInspector] public float scanInterval = 0.02f;
+    public float scanInterval = 0.01f;
     public float scanTimer;
     public float dathKnockDist = 0.7f;
     public float deathKnockTime = 0.25f;
     [HideInInspector]public bool pendingDeath;
+
+    int _missCount = 0;
+    const int MissToClear = 2;
 
     public LayerMask enemyMask;
     public LayerMask allyMask;
@@ -89,7 +92,28 @@ public class UnitBase : PoolableMono
         }      
     }
 
-    private void Update() => fsm.Tick();
+    private void Update()
+    {
+        fsm.Tick();
+
+        // 스캔 주기 처리
+        scanTimer += Time.deltaTime;
+        if (scanTimer >= scanInterval)  // scanInterval = 0.05~0.1f 권장
+        {
+            scanTimer = 0f;
+
+            Transform before = target;
+            ScanTarget();
+
+            if (!target)
+            {
+                _missCount++;
+                if (_missCount < MissToClear)
+                    target = before; // 한두 번 놓쳐도 이전 타깃 유지
+            }
+            else _missCount = 0;
+        }
+    }
     private void FixedUpdate() => fsm.FixedTick();
     #endregion
 
@@ -103,18 +127,46 @@ public class UnitBase : PoolableMono
     public void GoDead() => fsm.SetState(sDead);
 
     #region Unit Base Function
+    static readonly Collider2D[] scanBuf = new Collider2D[20];
+
     public void ScanTarget()
     {
         target = null;
-        Vector2 origin = transform.position;
-        RaycastHit2D hit = Physics2D.Raycast(origin, dir, GetUnitStat().unitRange, enemyMask);
 
-        if (hit.collider && hit.collider.TryGetComponent<UnitBase>(out var enemy))
-            target = enemy.transform;
-        else if (hit.collider && hit.collider.TryGetComponent<GameTarget>(out var target))
-            this.target = target.transform;
-        else
-            target = null;
+        float range = GetUnitStat().unitRange;
+        // 전방 중앙점을 기준으로 탐색 (근접/원거리 모두 안정적)
+        Vector2 center = (Vector2)transform.position + dir * (range * 0.5f);
+
+        int count = Physics2D.OverlapCircleNonAlloc(center, range * 0.6f, scanBuf, enemyMask);
+
+        float best = float.MaxValue;
+        Transform bestT = null;
+
+        for (int i = 0; i < count; i++)
+        {
+            var col = scanBuf[i];
+            if (!col) continue;
+
+            // 자기 자신 필터
+            if (col.transform == transform) continue;
+
+            // 정면성(시야각) 필터: 완전 원형이 부담되면 아래 주석 해제해서 전방만 남기기
+            // Vector2 to = (Vector2)col.transform.position - (Vector2)transform.position;
+            // if (Vector2.Dot(to.normalized, dir) < 0f) continue; // 후방 제외
+
+            // 유효 타깃만 인정
+            if (!col.TryGetComponent<UnitBase>(out var ub) && !col.TryGetComponent<GameTarget>(out var gt))
+                continue;
+
+            float dx = Mathf.Abs(col.transform.position.x - transform.position.x);
+            if (dx < best)
+            {
+                best = dx;
+                bestT = col.transform;
+            }
+        }
+
+        target = bestT;
     }
 
     public bool InAttackRange(Transform t, float rangeOverride = -1f)
@@ -144,12 +196,27 @@ public class UnitBase : PoolableMono
     public void TakeDamage(float damage)
     {
         if (IsDead) return; ;
-        unitStat.unitCurHp -= damage;
-        if (unitStat.unitCurHp <= 0)
+
+        if (damage >= unitStat.unitCurHp)
         {
-            pendingDeath = true;
-            GoDead();
+            if (gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                GameManager.Instance.GainProtocolPower(unitStat.unitCurHp);
+            unitStat.unitCurHp -= damage;
+            if (unitStat.unitCurHp <= 0)
+            {
+                pendingDeath = true;
+                GoDead();
+            }
         }
+        else
+        {
+            if(gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                GameManager.Instance.GainProtocolPower(damage);
+            unitStat.unitCurHp -= damage;
+        }
+
+        
+        
     }
     #endregion
 

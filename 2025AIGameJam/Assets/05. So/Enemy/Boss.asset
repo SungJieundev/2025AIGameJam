@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bdcb5f60e0be6d94bbcdb4af20924a8c, type: 3}
-  m_Name: Enemy5
+  m_Name: Boss
   m_EditorClassIdentifier: 
   unitId: 15
   unitName: "\uBCF4\uC2A4"
@@ -20,15 +20,16 @@ MonoBehaviour:
   unitRealImage: {fileID: 0}
   unitHp: 300
   unitDamage: 50
-  unitRange: 3
+  unitRange: 5
   unitMoveSpeed: 3
-  unitAttackSpeed: 0.333
+  unitAttackSpeed: 0.1
   attackKind: 1
   projectile: {fileID: 0}
   aoeRange: 0
-  aoeRadius: 1.5
+  aoeRadius: 2.5
   rangeHitDelay: 0
-  meleeHitDelay: 0.7
+  meleeHitDelay: 1
+  attackEndDelay: 0
   Hit1Deley: 0
   Hit2Deley: 0
   Hit3Deley: 0

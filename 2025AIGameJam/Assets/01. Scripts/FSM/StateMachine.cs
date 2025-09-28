@@ -15,6 +15,7 @@ public class StateMachine
         Current = next;
         Current?.OnEnter();
         OnStateChanged?.Invoke(Current);
+        Debug.Log("State : " + Current?.GetType().Name);
     }
 
     public void Tick() => Current?.Tick();

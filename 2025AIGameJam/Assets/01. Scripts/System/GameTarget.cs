@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameTarget : MonoBehaviour
@@ -7,6 +8,8 @@ public class GameTarget : MonoBehaviour
     public int maxHp;
     public int curHp;
     public LayerMask layer;
+
+    public TMP_Text hpText;
 
 
     private void Start()
@@ -17,10 +20,12 @@ public class GameTarget : MonoBehaviour
             maxHp = GameManager.Instance.playerMaxHp;
 
         curHp = maxHp;
+        UpdateHp();
     }
     public void TakeDamage(float damage)
     {
         curHp -= (int)damage;
+        UpdateHp();
         Debug.Log(curHp);
         if (curHp <= 0)
         {
@@ -29,5 +34,10 @@ public class GameTarget : MonoBehaviour
             else if (layer == LayerMask.GetMask("Tower"))
                 GameManager.Instance.GameOver();
         }
+    }
+
+    public void UpdateHp()
+    {
+        hpText.text = curHp.ToString() + " / " + maxHp.ToString();
     }
 }

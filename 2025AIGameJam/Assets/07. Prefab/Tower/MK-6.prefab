@@ -103,12 +103,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitSO: {fileID: 11400000, guid: d4877d6247c38e14db61004073316dc7, type: 2}
   firePoint: {fileID: 6233184260376757330}
+  effect: {fileID: 0}
   rb: {fileID: 0}
   anim: {fileID: 0}
   dir: {x: 0, y: 0}
   lastAttackTime: -999
   target: {fileID: 0}
-  scanInterval: 0.1
+  scanInterval: 0.02
   scanTimer: 0.01
   dathKnockDist: 0.7
   deathKnockTime: 0.25
@@ -179,7 +180,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -2.7015965, y: -0.75597763}
+  m_Offset: {x: -0.44438314, y: -0.75597763}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -190,7 +191,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 6.5408034, y: 24.60434}
+  m_Size: {x: 11.05523, y: 24.60434}
   m_EdgeRadius: 0
 --- !u!95 &699365888457398341
 Animator:

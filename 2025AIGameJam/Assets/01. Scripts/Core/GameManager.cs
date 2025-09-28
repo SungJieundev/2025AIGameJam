@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviour
     private int _playerIncomePerSecond;
     [HideInInspector] public int _playerIncomeLevel;
 
+    public float maxProtocolPower = 1000f;
+    public float curProtocolPower;
+
     public int damageUpgradeLevel = 0;
     public event Action<int> OnTowerDamageUpgrade;
 
@@ -56,6 +59,8 @@ public class GameManager : MonoBehaviour
         _playerIncomePerSecond = 12;
         _playerIncomeLevel = 0;
         damageUpgradeLevel = 0;
+        maxProtocolPower = 1000f;
+        curProtocolPower = 0f;
         inGameUI.UpdateTexts();
 
     }
@@ -116,4 +121,21 @@ public class GameManager : MonoBehaviour
 
     }
     #endregion
+
+    public void GainProtocolPower(float amount)
+    {
+        curProtocolPower += amount;
+        if (curProtocolPower > maxProtocolPower)
+            curProtocolPower = maxProtocolPower;
+
+        Debug.Log("Protocol Power: " + curProtocolPower);
+    }
+
+    public void UseProtocolPower(float amount)
+    {
+        curProtocolPower -= amount;
+        if (curProtocolPower < 0f)
+            curProtocolPower = 0f;
+    }
+
 }

@@ -24,7 +24,7 @@ public class TowerSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F9)) SpawnTower(8);
+
     }
 
     public void BuyTower(int index)
@@ -42,6 +42,27 @@ public class TowerSpawner : MonoBehaviour
             }       
         }
         GameManager.Instance.UseMoney(so.unitPrice);
+        SpawnTower(index);
+        lastSpawnTime[index] = Time.time;
+
+        FindObjectOfType<InGameUI>().StartTowerCooldown(index, so.cooldown);
+    }
+
+    public void ProtocolMecha(int index)
+    {
+        UnitBase unit = towerList[index].GetComponent<UnitBase>();
+        UnitSO so = unit.unitSO;
+        if (GameManager.Instance.curProtocolPower < so.unitPrice) return;
+
+        if (lastSpawnTime.TryGetValue(index, out float lastTime))
+        {
+            float elapsed = Time.time - lastTime;
+            if (elapsed < so.cooldown)
+            {
+                return;
+            }
+        }
+        GameManager.Instance.UseProtocolPower(so.unitPrice);
         SpawnTower(index);
         lastSpawnTime[index] = Time.time;
 

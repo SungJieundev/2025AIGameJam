@@ -102,12 +102,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitSO: {fileID: 11400000, guid: 20c99b993a0a1134c819c0d53ce3deb9, type: 2}
   firePoint: {fileID: 0}
+  effect: {fileID: 0}
   rb: {fileID: 0}
   anim: {fileID: 0}
   dir: {x: 0, y: 0}
   lastAttackTime: -999
   target: {fileID: 0}
-  scanInterval: 0.1
+  scanInterval: 0.02
   scanTimer: 0.1
   dathKnockDist: 0.7
   deathKnockTime: 0.7
