@@ -17,18 +17,18 @@ public class CollectionDetailManager : MonoBehaviour
     
     [Header("메카 패널")]
     public RectTransform mechaContentContainer;
-    public float mechaPanelMinPosX = 0;
-    public float mechaPanelMaxPosX = 0;
-    public float currentMechaPosX = 0;
+    public float mechaPanelMinIndex = 0;
+    public float mechaPanelMaxIndex = 0;
+    private float currentMechaIndex = 0;
     
     public GameObject mechaNextButton;
     public GameObject mechaPreviousButton;
     
     [Header("몬스터 패널")]
     public RectTransform monsterContentContainer;
-    public float monsterPanelMinPosX = 0;
-    public float monsterPanelMaxPosX = 0;
-    public float currentMonsterPosX = 0;
+    public float monsterPanelMinIndex = 0;
+    public float monsterPanelMaxIndex = 0;
+    private float currentMonsterIndex = 0;
     
     public GameObject monsterNextButton;
     public GameObject monsterPreviousButton;
@@ -46,8 +46,15 @@ public class CollectionDetailManager : MonoBehaviour
         sequence.Append(mechaContentContainer.DOAnchorPosY(0, yDuration).SetEase(Ease.OutExpo));
         sequence.OnComplete(() =>
         {
-            currentMechaPosX = mechaContentContainer.anchoredPosition.x;
+            currentMechaIndex = index;
         });
+        
+        if(index == mechaPanelMaxIndex) mechaNextButton.SetActive(false);
+        else mechaNextButton.SetActive(true);
+        
+        if(index == mechaPanelMinIndex) mechaPreviousButton.SetActive(false);
+        else mechaPreviousButton.SetActive(true);
+        
     }
 
     //몬스터 도감 버튼 클릭시 호출
@@ -61,8 +68,13 @@ public class CollectionDetailManager : MonoBehaviour
         sequence.Append(monsterContentContainer.DOAnchorPosY(0, yDuration).SetEase(Ease.OutExpo));
         sequence.OnComplete(() =>
         {
-            currentMonsterPosX = monsterContentContainer.anchoredPosition.x;
+            currentMonsterIndex = index;
         });
+        if(index == monsterPanelMaxIndex) monsterNextButton.SetActive(false);
+        else monsterNextButton.SetActive(true);
+        
+        if(index == monsterPanelMinIndex) monsterPreviousButton.SetActive(false);
+        else monsterPreviousButton.SetActive(true);
     }
 
     void Start()
@@ -72,6 +84,9 @@ public class CollectionDetailManager : MonoBehaviour
 
     private void Init()
     {
+        //currentMechaPosX = mechaContentContainer.anchoredPosition.x;
+        //currentMonsterPosX = monsterContentContainer.anchoredPosition.x;
+        
         //_panelParent.anchoredPosition = new Vector2(0, 0);
         //previousButton.SetActive(false);
         //currentMoveIndex = 0;
@@ -95,20 +110,31 @@ public class CollectionDetailManager : MonoBehaviour
     //확인해야함
     private void MechaMoveNextPanel()
     {
+        Debug.Log("메카다음버튼 눌림");
         mechaContentContainer.DOAnchorPosX(mechaContentContainer.anchoredPosition.x - _panelMoveDistance, 0.5f).SetEase(Ease.OutExpo);
-        currentMechaPosX = mechaContentContainer.anchoredPosition.x;
         
-        if (currentMechaPosX <= mechaPanelMinPosX) mechaPreviousButton.SetActive(true);
-        if(currentMechaPosX >= mechaPanelMaxPosX) mechaNextButton.SetActive(false);
+        currentMechaIndex++;
+        
+        if (currentMechaIndex > mechaPanelMinIndex) mechaPreviousButton.SetActive(true);
+        if (currentMechaIndex <= mechaPanelMinIndex) mechaPreviousButton.SetActive(false);
+        
+        if(currentMechaIndex <= mechaPanelMaxIndex) mechaNextButton.SetActive(true);
+        if(currentMechaIndex >= mechaPanelMaxIndex) mechaNextButton.SetActive(false);
     }
 
     private void MechaMovePreviousPanel()
     {
+        Debug.Log("메카이전버튼 눌림");
         mechaContentContainer.DOAnchorPosX(mechaContentContainer.anchoredPosition.x + _panelMoveDistance, 0.5f).SetEase(Ease.OutExpo);
-        currentMechaPosX = mechaContentContainer.anchoredPosition.x;
+
+        currentMechaIndex--;
         
-        if (currentMechaPosX <= mechaPanelMinPosX) mechaPreviousButton.SetActive(true);
-        if(currentMechaPosX >= mechaPanelMaxPosX) mechaNextButton.SetActive(false);
+        
+        if (currentMechaIndex > mechaPanelMinIndex) mechaPreviousButton.SetActive(true);
+        if (currentMechaIndex <= mechaPanelMinIndex) mechaPreviousButton.SetActive(false);
+        
+        if(currentMechaIndex <= mechaPanelMaxIndex) mechaNextButton.SetActive(true);
+        if(currentMechaIndex >= mechaPanelMaxIndex) mechaNextButton.SetActive(false);
     }
     
     
@@ -128,13 +154,32 @@ public class CollectionDetailManager : MonoBehaviour
     
     private void MonsterMoveNextPanel()
     {
+        Debug.Log("몬스터다음버튼 눌림");
+        monsterContentContainer.DOAnchorPosX(monsterContentContainer.anchoredPosition.x - _panelMoveDistance, 0.5f).SetEase(Ease.OutExpo);
         
+        currentMonsterIndex++;
+        
+        if (currentMonsterIndex > monsterPanelMinIndex) monsterPreviousButton.SetActive(true);
+        if (currentMonsterIndex <= monsterPanelMinIndex) monsterPreviousButton.SetActive(false);
+        
+        if(currentMonsterIndex <= monsterPanelMaxIndex) monsterNextButton.SetActive(true);
+        if(currentMonsterIndex >= monsterPanelMaxIndex) monsterNextButton.SetActive(false);
         
     }
 
     private void MonsterMovePreviousPanel()
     {
+        Debug.Log("메카이전버튼 눌림");
+        monsterContentContainer.DOAnchorPosX(monsterContentContainer.anchoredPosition.x + _panelMoveDistance, 0.5f).SetEase(Ease.OutExpo);
+
+        currentMonsterIndex--;
         
+        
+        if (currentMonsterIndex > monsterPanelMinIndex) monsterPreviousButton.SetActive(true);
+        if (currentMonsterIndex <= monsterPanelMinIndex) monsterPreviousButton.SetActive(false);
+        
+        if(currentMonsterIndex <= monsterPanelMaxIndex) monsterNextButton.SetActive(true);
+        if(currentMonsterIndex >= monsterPanelMaxIndex) monsterNextButton.SetActive(false);
     }
 
     
