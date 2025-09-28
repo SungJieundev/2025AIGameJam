@@ -110,18 +110,21 @@ class MeleeAOEBehaviour : IAttackBehaviour
         u.isAttacking = true;
         u.rb.velocity = Vector2.zero;
         u.lastAttackTime = Time.time;
-        u.StartCoroutine(Hit(u));
+        if (u.effect != null)
+        {
+            u.StartCoroutine(EffectOn(u));
+        }
+        else
+        {
+            u.StartCoroutine(Hit(u));
+        }
         u.anim.SetTrigger("Attack");
         // 공격 애니메이션 재생
     }
 
     IEnumerator Hit(UnitBase u)
     {
-        yield return new WaitForSeconds(Mathf.Max(0f, so.meleeHitDelay)); 
-        if (u.effect != null)
-        {
-            u.StartCoroutine(EffectOn(u));
-        }
+        yield return new WaitForSeconds(Mathf.Max(0f, so.meleeHitDelay));
         OnHit(u);
         End(u);
     }
@@ -130,8 +133,11 @@ class MeleeAOEBehaviour : IAttackBehaviour
     {
 
         u.effect.SetActive(true);
-        yield return new WaitForSeconds(so.attackEndDelay);
+        yield return new WaitForSeconds(Mathf.Max(0f, so.meleeHitDelay));
+        OnHit(u);
+        yield return new WaitForSeconds(so.attackEndDelay-so.meleeHitDelay);
         u.effect.SetActive(false);
+        End(u);
     }
 
     public void OnHit(UnitBase u)

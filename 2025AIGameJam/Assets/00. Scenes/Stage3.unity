@@ -4764,6 +4764,10 @@ MonoBehaviour:
   - {fileID: 2053633360}
   - {fileID: 830907296}
   waves:
+  - spawnTimer: 1
+    enemy: {fileID: 7804484756355126778, guid: 5d651d0c54a883a4abd6f28719a5e6f9, type: 3}
+    count: 1
+    interval: 10
   - spawnTimer: 5
     enemy: {fileID: 7593162981319698868, guid: 6520224df7b392345b0fb7b289a047ee, type: 3}
     count: 5

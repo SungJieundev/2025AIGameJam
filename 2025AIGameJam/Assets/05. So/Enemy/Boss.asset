@@ -18,18 +18,18 @@ MonoBehaviour:
   unitPrice: 0
   cooldown: 0
   unitRealImage: {fileID: 0}
-  unitHp: 300
-  unitDamage: 50
-  unitRange: 5
-  unitMoveSpeed: 3
+  unitHp: 2000
+  unitDamage: 300
+  unitRange: 4.5
+  unitMoveSpeed: 1
   unitAttackSpeed: 0.1
   attackKind: 1
   projectile: {fileID: 0}
   aoeRange: 0
-  aoeRadius: 2.5
+  aoeRadius: 2.25
   rangeHitDelay: 0
-  meleeHitDelay: 1
-  attackEndDelay: 0
+  meleeHitDelay: 1.5
+  attackEndDelay: 1.6
   Hit1Deley: 0
   Hit2Deley: 0
   Hit3Deley: 0
