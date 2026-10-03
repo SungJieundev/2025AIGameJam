@@ -18,8 +18,8 @@ MonoBehaviour:
   unitPrice: 0
   cooldown: 0
   unitRealImage: {fileID: 0}
-  unitHp: 300
-  unitDamage: 50
+  unitHp: 250
+  unitDamage: 40
   unitRange: 2
   unitMoveSpeed: 3
   unitAttackSpeed: 0.333

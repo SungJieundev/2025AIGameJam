@@ -25,6 +25,8 @@ public class AudioManager : MonoBehaviour
     {
         foreach (AudioClip clip in clips)
             CreateAudioPool(clip);
+        
+        DontDestroyOnLoad(this);
     }
 
     public void PlayBGM(string clipName) => PlayAudio(clipName, bgmPlayer);

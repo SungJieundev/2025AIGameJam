@@ -96,9 +96,9 @@ public class UnitBase : PoolableMono
     {
         fsm.Tick();
 
-        // ½ºÄµ ÁÖ±â Ã³¸®
+        // ï¿½ï¿½Äµ ï¿½Ö±ï¿½ Ã³ï¿½ï¿½
         scanTimer += Time.deltaTime;
-        if (scanTimer >= scanInterval)  // scanInterval = 0.05~0.1f ±ÇÀå
+        if (scanTimer >= scanInterval)  // scanInterval = 0.05~0.1f ï¿½ï¿½ï¿½ï¿½
         {
             scanTimer = 0f;
 
@@ -109,7 +109,7 @@ public class UnitBase : PoolableMono
             {
                 _missCount++;
                 if (_missCount < MissToClear)
-                    target = before; // ÇÑµÎ ¹ø ³õÃÄµµ ÀÌÀü Å¸±ê À¯Áö
+                    target = before; // ï¿½Ñµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Äµï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             }
             else _missCount = 0;
         }
@@ -134,7 +134,7 @@ public class UnitBase : PoolableMono
         target = null;
 
         float range = GetUnitStat().unitRange;
-        // Àü¹æ Áß¾ÓÁ¡À» ±âÁØÀ¸·Î Å½»ö (±ÙÁ¢/¿ø°Å¸® ¸ðµÎ ¾ÈÁ¤Àû)
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ß¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
         Vector2 center = (Vector2)transform.position + dir * (range * 0.5f);
 
         int count = Physics2D.OverlapCircleNonAlloc(center, range * 0.6f, scanBuf, enemyMask);
@@ -147,14 +147,8 @@ public class UnitBase : PoolableMono
             var col = scanBuf[i];
             if (!col) continue;
 
-            // ÀÚ±â ÀÚ½Å ÇÊÅÍ
+            // ï¿½Ú±ï¿½ ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (col.transform == transform) continue;
-
-            // Á¤¸é¼º(½Ã¾ß°¢) ÇÊÅÍ: ¿ÏÀü ¿øÇüÀÌ ºÎ´ãµÇ¸é ¾Æ·¡ ÁÖ¼® ÇØÁ¦ÇØ¼­ Àü¹æ¸¸ ³²±â±â
-            // Vector2 to = (Vector2)col.transform.position - (Vector2)transform.position;
-            // if (Vector2.Dot(to.normalized, dir) < 0f) continue; // ÈÄ¹æ Á¦¿Ü
-
-            // À¯È¿ Å¸±ê¸¸ ÀÎÁ¤
             if (!col.TryGetComponent<UnitBase>(out var ub) && !col.TryGetComponent<GameTarget>(out var gt))
                 continue;
 
@@ -189,14 +183,14 @@ public class UnitBase : PoolableMono
         }
     }
 
-    // ½ºÄµ Å¸ÀÌ¸Ó Á¢±Ù¿ë
+    // ï¿½ï¿½Äµ Å¸ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½Ù¿ï¿½
     public ref float ScanTimerRef() => ref scanTimer;
 
     public bool IsDead => unitStat.unitCurHp <= 0f;
     public void TakeDamage(float damage)
     {
         if (IsDead) return; ;
-
+        AudioManager.Instance.PlaySystem("OnHit");
         if (damage >= unitStat.unitCurHp)
         {
             if (gameObject.layer == LayerMask.NameToLayer("Enemy"))
