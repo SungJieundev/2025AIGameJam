@@ -31,17 +31,23 @@ public class TowerSpawner : MonoBehaviour
     {
         UnitBase unit = towerList[index].GetComponent<UnitBase>();
         UnitSO so = unit.unitSO;
-        if (GameManager.Instance.playerCurMoney < so.unitPrice) return;
+        if (GameManager.Instance.playerCurMoney < so.unitPrice)
+        {
+            AudioManager.Instance.PlaySystem("CantSpawnAudio");
+            return;
+        }
 
         if (lastSpawnTime.TryGetValue(index, out float lastTime))
         {
             float elapsed = Time.time - lastTime;
             if (elapsed < so.cooldown)
             {
+                AudioManager.Instance.PlaySystem("CantSpawnAudio");
                 return;
             }       
         }
         GameManager.Instance.UseMoney(so.unitPrice);
+        AudioManager.Instance.PlaySystem("BuyMechaAudio");
         SpawnTower(index);
         lastSpawnTime[index] = Time.time;
 
@@ -52,17 +58,23 @@ public class TowerSpawner : MonoBehaviour
     {
         UnitBase unit = towerList[index].GetComponent<UnitBase>();
         UnitSO so = unit.unitSO;
-        if (GameManager.Instance.curProtocolPower < so.unitPrice) return;
+        if (GameManager.Instance.curProtocolPower < so.unitPrice)
+        {
+            AudioManager.Instance.PlaySystem("CantSpawnAudio");
+            return;
+        }
 
         if (lastSpawnTime.TryGetValue(index, out float lastTime))
         {
             float elapsed = Time.time - lastTime;
             if (elapsed < so.cooldown)
             {
+                AudioManager.Instance.PlaySystem("CantSpawnAudio");
                 return;
             }
         }
         GameManager.Instance.UseProtocolPower(so.unitPrice);
+        AudioManager.Instance.PlaySystem("CanProtocolMechaAudio");
         SpawnTower(index);
         lastSpawnTime[index] = Time.time;
 

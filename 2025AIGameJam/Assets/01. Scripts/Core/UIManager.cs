@@ -7,7 +7,26 @@ using UnityEngine.EventSystems;
 
 public class UIManager : MonoBehaviour
 {
+
+    public GameObject option;
+    public bool isStage = false;
+    public GameObject giveupButton;
     
+    public static UIManager Instance;
+    
+    void Awake()
+    {
+        if(SceneLoader.Instance == null)
+            SceneLoader.Instance = new SceneLoader();
+        
+        if (Instance == null)
+            Instance = this;
+        
+        giveupButton.SetActive(isStage);
+        DontDestroyOnLoad(this);
+        AudioManager.Instance.PlayBGM("TitleBGM");
+    }
+
     /// <summary>
     /// ✅ 버튼 OnClick에 등록해서 쓰는 버전 (기존)
     /// 클릭한 버튼이 속한 캔버스를 비활성화하고, targetCanvas를 활성화합니다.
@@ -107,6 +126,12 @@ public class UIManager : MonoBehaviour
             .Append(tipText.DOFade(1f, fadeDuration));
 
         currentTween = seq;
+    }
+
+    public void NextScene(string scene)
+    {
+        SceneLoader.Instance.LoadScene(scene);
+        AudioManager.Instance.PlaySFX("StageSelectAudio", AudioManager.Instance.sfxPlayer);
     }
     
     

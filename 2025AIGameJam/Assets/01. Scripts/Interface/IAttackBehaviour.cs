@@ -6,9 +6,9 @@ using UnityEngine;
 
 public interface IAttackBehaviour
 {
-    bool CanExecute(UnitBase u); // »ç°Å¸®/ÄðÅ¸ÀÓ ÃæÁ·?
-    void Begin(UnitBase u);      // ¾Ö´Ï Æ®¸®°Å/»çÀü ÁØºñ
-    void OnHit(UnitBase u);      // ½ÇÁ¦ ÇÇÇØ/Åõ»çÃ¼/AOE
+    bool CanExecute(UnitBase u); // ï¿½ï¿½Å¸ï¿½/ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½?
+    void Begin(UnitBase u);      // ï¿½Ö´ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½ ï¿½Øºï¿½
+    void OnHit(UnitBase u);      // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½Ã¼/AOE
     void End(UnitBase u);
 }
 
@@ -41,13 +41,13 @@ class MeleeSingleBehaviour : IAttackBehaviour
 
     public void Begin(UnitBase u)
     {
-        Debug.Log("°ø°Ý ½ÇÇà");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         u.isAttacking = true;
         u.rb.velocity = Vector2.zero;
         u.lastAttackTime = Time.time;
         u.StartCoroutine(Hit(u));
         u.anim.SetTrigger("Attack");
-        // °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
 
     }
 
@@ -106,7 +106,7 @@ class MeleeAOEBehaviour : IAttackBehaviour
 
     public void Begin(UnitBase u)
     {
-        Debug.Log("±¤¿ª °ø°Ý ½ÇÇà");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         u.isAttacking = true;
         u.rb.velocity = Vector2.zero;
         u.lastAttackTime = Time.time;
@@ -119,7 +119,7 @@ class MeleeAOEBehaviour : IAttackBehaviour
             u.StartCoroutine(Hit(u));
         }
         u.anim.SetTrigger("Attack");
-        // °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
     }
 
     IEnumerator Hit(UnitBase u)
@@ -143,7 +143,7 @@ class MeleeAOEBehaviour : IAttackBehaviour
     public void OnHit(UnitBase u)
     {
         Vector2 center = (Vector2)u.transform.position + u.dir * (so.unitRange * 0.5f);
-        Debug.DrawLine(u.transform.position, center, Color.green, 0.5f);              // °ø°Ý Áß½ÉÁ¡±îÁö ¼±
+        Debug.DrawLine(u.transform.position, center, Color.green, 0.5f);              // ï¿½ï¿½ï¿½ï¿½ ï¿½ß½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         DrawCircle(center, so.aoeRadius, Color.green, 0.5f);
         int count = Physics2D.OverlapCircleNonAlloc(center, so.aoeRadius, hits, u.enemyMask);
         for (int i = 0; i < count; i++)
@@ -194,7 +194,7 @@ class RangedSingleBehaviour : IAttackBehaviour
 
     public void Begin(UnitBase u)
     {
-        Debug.Log("¿ø°Å¸® °ø°Ý ½ÇÇà");
+        Debug.Log("ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         u.isAttacking = true;
         u.rb.velocity = Vector2.zero;
         u.lastAttackTime = Time.time;
@@ -213,6 +213,7 @@ class RangedSingleBehaviour : IAttackBehaviour
     {
         if (!u.target || !so.projectile) return;
         var proj = PoolManager.Instance.Pop(so.projectile.name);
+        AudioManager.Instance.PlaySystem("Shot");
         proj.gameObject.GetComponent<Projectile>().Init(u);
         proj.transform.position = u.firePoint.position;
     }
@@ -239,13 +240,13 @@ class RangedAOEBehaviour : IAttackBehaviour
     }
     public void Begin(UnitBase u)
     {
-        Debug.Log("±¤¿ª ¿ø°Å¸® °ø°Ý ½ÇÇà");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         u.isAttacking = true;
         u.rb.velocity = Vector2.zero;
         u.lastAttackTime = Time.time;
         u.StartCoroutine(Hit(u));
         u.anim.SetTrigger("Attack");
-        // °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
     }
 
     IEnumerator Hit(UnitBase u)
@@ -308,13 +309,13 @@ class ProtocolBehaviour : IAttackBehaviour
 
     public void Begin(UnitBase u)
     {
-        Debug.Log("±¤¿ª °ø°Ý ½ÇÇà");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         u.isAttacking = true;
         u.rb.velocity = Vector2.zero;
         u.lastAttackTime = Time.time;
         u.StartCoroutine(Hit(u));
         u.anim.SetTrigger("Attack");
-        // °ø°Ý ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½
     }
 
     IEnumerator Hit(UnitBase u)
@@ -348,7 +349,7 @@ class ProtocolBehaviour : IAttackBehaviour
     {
         Vector2 center = (Vector2)u.transform.position + u.dir * so.aoeRange;
         int count = Physics2D.OverlapCircleNonAlloc(center, so.aoeRadius, hits, u.enemyMask);
-        // ÇÁ·ÎÅäÄÝ ¸¶Áö¸· °ø°Ý ¼Ò¸®
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò¸ï¿½
         for (int i = 0; i < count; i++)
         {
             if (hits[i] && hits[i].TryGetComponent<UnitBase>(out var d))

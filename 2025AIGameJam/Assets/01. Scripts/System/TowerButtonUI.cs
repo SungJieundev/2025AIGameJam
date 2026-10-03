@@ -39,6 +39,7 @@ public class TowerButtonUI : MonoBehaviour
             {
                 cooldownMask.fillAmount = 0;
                 cooldownEndTime = -1f;
+                AudioManager.Instance.PlaySFX("CanSpawnAudio", AudioManager.Instance.sfxPlayer);
             }
             else
             {

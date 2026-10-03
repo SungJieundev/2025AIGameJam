@@ -22,7 +22,7 @@ MonoBehaviour:
   cooldown: 4
   unitRealImage: {fileID: 0}
   unitHp: 100
-  unitDamage: 20
+  unitDamage: 40
   unitRange: 3
   unitMoveSpeed: 2
   unitAttackSpeed: 0.5
@@ -32,3 +32,8 @@ MonoBehaviour:
   aoeRadius: 0
   rangeHitDelay: 0.2
   meleeHitDelay: 0
+  attackEndDelay: 0
+  Hit1Deley: 0
+  Hit2Deley: 0
+  Hit3Deley: 0
+  Hit4Deley: 0
